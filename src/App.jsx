@@ -1195,36 +1195,50 @@ export default function App() {
             )}
 
             <div className="mobile-character-bar">
+    <label htmlFor="mobile-character-select">
+        Character
+    </label>
 
-                <button
-                    onClick={() =>
-                        setMobileCharactersOpen(
-                            !mobileCharactersOpen
-                        )
-                    }
+    <select
+        id="mobile-character-select"
+        value={selectedCharacter?.name || ""}
+        onChange={(event) => {
+            const character =
+                characters.find(
+                    (item) =>
+                        item.name ===
+                        event.target.value
+                );
+
+            if (character) {
+                handleSelect(character);
+            }
+        }}
+    >
+        <option value="" disabled>
+            Select a character
+        </option>
+
+        {characters.map(
+            (character, index) => (
+                <option
+                    key={`${character.name}-${index}`}
+                    value={character.name}
                 >
+                    {character.name}
+                </option>
+            )
+        )}
+    </select>
+</div>
 
-                    ☰{" "}
-
-                    {selectedCharacter?.name ||
-                        "Characters"}
-
-                </button>
-
-            </div>
-
-            <div className="app-layout">
-
-                {(characters.length > 0 ||
-                    mobileCharactersOpen) && (
-
-                        <CharacterList
-                            characters={characters}
-                            selected={selectedCharacter}
-                            onSelect={handleSelect}
-                        />
-
-                    )}
+<div className="desktop-character-list">
+    <CharacterList
+        characters={characters}
+        selected={selectedCharacter}
+        onSelect={handleSelect}
+    />
+</div>
 
                 {selectedCharacter ? (
 
