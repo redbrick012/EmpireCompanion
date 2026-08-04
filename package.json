@@ -3,13 +3,14 @@
   "type": "module",
   "private": true,
   "version": "0.0.0",
-  "scripts": {
-    "dev": "vite",
-   "start": "node server/server.js",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
-  },
+"scripts": {
+  "dev": "vite",
+  "start": "node server/server.js",
+  "build": "vite build",
+  "render-build": "npm install && npx playwright install --with-deps chromium && npx playwright install --list",
+  "lint": "oxlint",
+  "preview": "vite preview"
+},
   "dependencies": {
     "cheerio": "^1.2.0",
     "cors": "^2.8.6",
