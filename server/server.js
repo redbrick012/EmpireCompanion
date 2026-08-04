@@ -3,6 +3,13 @@ import cors from "cors";
 import { chromium } from "playwright";
 import fs from "fs";
 import path from "path";
+import pg from "pg";
+
+const { Pool } = pg;
+
+const db = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -2284,7 +2291,34 @@ app.get(
         });
     }
 );
+app.get(
+    "/api/health/db",
+    async (req, res) => {
+        try {
+            const result = await db.query(
+                "SELECT NOW() AS time"
+            );
 
+            res.json({
+                success: true,
+                database: "connected",
+                time: result.rows[0].time,
+            });
+
+        } catch (error) {
+            console.error(
+                "[Empire Companion] Database test failed:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                database: "error",
+                error: error.message,
+            });
+        }
+    }
+);
 
 /*
 ==========================================================
