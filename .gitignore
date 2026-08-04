@@ -53,3 +53,7 @@ ENV/
 # ============================================================
 
 *.logserver/pd-session/
+server/pd-session/
+server/pd-session/
+pd-session/
+pd-session/
