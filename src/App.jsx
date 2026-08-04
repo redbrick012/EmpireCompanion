@@ -1,7 +1,27 @@
 import { useMemo, useState } from "react";
 import "./App.css";
 
-const API_URL = "https://empire-companion-api.onrender.com";
+const API_URL = "http://localhost:3001";
+const SESSION_KEY = "empire_companion_session_id";
+
+function getSessionId() {
+
+    let sessionId =
+        localStorage.getItem(SESSION_KEY);
+
+    if (!sessionId) {
+
+        sessionId =
+            crypto.randomUUID();
+
+        localStorage.setItem(
+            SESSION_KEY,
+            sessionId
+        );
+    }
+
+    return sessionId;
+}
 const STORAGE_KEY = "empire_companion_characters";
 
 const emptyData = {
@@ -807,37 +827,25 @@ export default function App() {
     LOAD FROM BACKEND
     ======================================================
     */
+async function loadFromBackend() {
 
-    async function loadFromBackend(
-        login,
-        password
-    ) {
+    try {
 
-        setLoading(true);
-        setError(null);
+        const response =
+            await fetch(
+                "http://localhost:3001/api/pd/login",
+                {
+                    method: "POST",
 
-        try {
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-            const response =
-                await fetch(
-                    `${API_URL}/api/pd/login`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json",
-
-                            Accept:
-                                "application/json",
-                        },
-
-                        body: JSON.stringify({
-                            login,
-                            password,
-                        }),
-                    }
-                );
+                        Accept:
+                            "application/json",
+                    },
+                }
+            );
 
             let result;
 
@@ -1155,14 +1163,9 @@ export default function App() {
                             <button
                                 className="primary-button"
                                 onClick={() =>
-                                    loadFromBackend(
-                                        pdLogin,
-                                        pdPassword
-                                    )
+                                    loadFromBackend()
                                 }
                                 disabled={
-                                    !pdLogin ||
-                                    !pdPassword ||
                                     loading
                                 }
                             >
@@ -1194,52 +1197,55 @@ export default function App() {
 
             )}
 
-            <div className="mobile-character-bar">
-    <label htmlFor="mobile-character-select">
-        Character
-    </label>
+            <div className="character-navigation">
 
-    <select
-        id="mobile-character-select"
-        value={selectedCharacter?.name || ""}
-        onChange={(event) => {
-            const character =
-                characters.find(
-                    (item) =>
-                        item.name ===
-                        event.target.value
-                );
+    <div className="mobile-character-bar">
+        <label htmlFor="mobile-character-select">
+            Character
+        </label>
 
-            if (character) {
-                handleSelect(character);
-            }
-        }}
-    >
-        <option value="" disabled>
-            Select a character
-        </option>
+        <select
+            id="mobile-character-select"
+            value={selectedCharacter?.name || ""}
+            onChange={(event) => {
+                const character =
+                    characters.find(
+                        (item) =>
+                            item.name ===
+                            event.target.value
+                    );
 
-        {characters.map(
-            (character, index) => (
-                <option
-                    key={`${character.name}-${index}`}
-                    value={character.name}
-                >
-                    {character.name}
-                </option>
-            )
-        )}
-    </select>
+                if (character) {
+                    handleSelect(character);
+                }
+            }}
+        >
+            <option value="" disabled>
+                Select a character
+            </option>
+
+            {characters.map(
+                (character, index) => (
+                    <option
+                        key={`${character.name}-${index}`}
+                        value={character.name}
+                    >
+                        {character.name}
+                    </option>
+                )
+            )}
+        </select>
+    </div>
+
+    <div className="desktop-character-list">
+        <CharacterList
+            characters={characters}
+            selected={selectedCharacter}
+            onSelect={handleSelect}
+        />
+    </div>
+
 </div>
-
-<div className="desktop-character-list">
-    <CharacterList
-        characters={characters}
-        selected={selectedCharacter}
-        onSelect={handleSelect}
-    />
-</div>
-
                 {selectedCharacter ? (
 
                     <CharacterDetail
@@ -1261,7 +1267,6 @@ export default function App() {
 
                 )}
 
-            </div>
 
             <div className="app-footer">
 
