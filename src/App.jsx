@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import "./App.css";
 
-const API_URL = `http://${window.location.hostname}:5000`;
+const API_URL = `http://${window.location.hostname}:3001`;
 const STORAGE_KEY = "empire_companion_characters";
 
 const emptyData = {
