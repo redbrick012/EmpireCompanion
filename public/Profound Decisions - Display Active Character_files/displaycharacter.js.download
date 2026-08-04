@@ -1,0 +1,13 @@
+$(document).ready(function () {
+    $('a.more').click(function(event) {
+        div = $(this).parent().children('div.more');
+        if (div.hasClass('displayNone')) {
+          div.removeClass('displayNone');
+          $(this).html('Less');
+        } else {
+          div.addClass('displayNone');
+          $(this).html('More');
+        }
+        event.stopPropagation(); 
+    });
+});

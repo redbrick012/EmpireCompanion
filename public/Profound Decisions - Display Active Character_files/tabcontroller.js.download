@@ -1,0 +1,4 @@
+function DisplayThisStage(element){
+		$(".TabPanel.OpenStep").removeClass("OpenStep").addClass("ClosedStep");
+		element.addClass("OpenStep").removeClass("ClosedStep");
+}

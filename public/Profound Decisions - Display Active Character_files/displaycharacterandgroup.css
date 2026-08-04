@@ -1,0 +1,590 @@
+#DisplayCharacter h1 {
+  padding: 0 0 0 0;
+}
+
+.Empire .standAlone .Selector {
+  margin-left: 0px;
+}
+
+.Empire .standAlone .Selector .rightOfCheckBoxLabel  {
+  display: none;
+}
+
+.Empire h1  {
+  padding-bottom: 0px;
+}
+
+.Empire h3 {
+  padding-bottom: 2px;
+}
+
+#DisplayCharacter .viewerTable, #DisplayActiveCharacter .viewerTable {
+  max-width: 320px;
+  margin: 0 10px 0 0;
+}
+
+#DisplayCharacter .nationImage {
+    height: 290px;
+}
+
+#backgroundTitle {
+  display: none;
+}
+
+#DisplayActiveCharacter .rightNavigation  {
+  margin-top: 10px;
+}
+
+#DisplayActiveCharacter .rightNavigation a.buttonLink {
+  display: block;
+}
+
+#DisplayActiveCharacter .shortButtons a.buttonLink {
+  width: 125px;
+}
+
+#DisplayActiveCharacter .listHeader {
+  display: none;
+}
+
+#DisplayActiveCharacter table#inventoryTable table td {
+  color: #222244;
+  text-align: left;
+  padding-left: 0;
+  white-space: nowrap;
+}
+
+/************************** Skills *****************************************/
+
+.skillColumns {
+  width: 400px;
+  float: right;
+  margin-right: 20px;
+}
+
+.skillBlock a {
+  display: block;
+}
+
+.skillBlock a:hover {
+  text-decoration: none;
+}
+
+/* Character Viewer */
+
+.skillBlock {
+  clear: left;
+  margin-bottom: 20px;
+  min-height: 50px;
+}
+
+.skillBlock img {
+    float: left;
+    width: 50px;
+}
+
+.skillBlock .skillHeader {
+    margin-left: 58px;
+    margin-top: .4em;
+    display: block;
+    font-weight: bold;
+    color: #336699;
+}
+
+.skillBlock .skillHeader + .skillHeader{
+    margin-top: .1em;
+}
+
+.skillBlock a + a {
+    margin-top: .2em;
+    margin-bottom: .2em;
+}
+
+.skillBlock .preparationList {
+  margin-top: 15px;
+}
+
+a.buttonLink.tiny {
+  width: 28px;
+  font-size: 10px;
+}
+
+#DisplayActiveCharacter .ingredientBlock, #DisplayCharacter .ingredientBlock {
+  margin-left: 58px;
+}
+
+#backgroundTitle {
+  clear: left;
+}
+
+.skillBlock .skillText {
+    color: #222244;
+    display: block;
+    margin-left: 58px;
+    line-height: 1.25;
+    margin-bottom: .4em;15:43 31/05/2020
+}
+
+.skillBlock .ingredientBlock p {
+    float: left;
+    margin-right: 5px;
+}
+
+.skillBlock .ingredientBlock table {
+    float: left;
+    margin-bottom: 20px;
+}
+
+.skillBlock .itemDescription {
+    margin-bottom: .2em;
+}
+
+.skillList {
+  list-style: disc;
+  color: #336699;
+  margin-left: 16px;
+  margin-top: 6px;
+}
+
+.skillList li {
+  margin-top: 2px;
+}
+
+#skillDetailsButtons a {
+  width: 125px;
+  margin-bottom: 10px;
+}
+
+/************************** Ribbons *****************************************/
+
+.ribbonBonds h2 {
+  margin: 5px 0 0 5px;
+}
+
+.info {
+  padding: 10px 5px;
+}
+
+/************************** Effects *****************************************/
+
+.tableLink {
+  text-align: center;
+}
+
+.tableLink a.help {
+  width: 18px;
+  float: none;
+  margin: 0;
+  display: inline-block;
+}
+
+.tableLink .help img {
+  width: 18px;
+  position: relative;
+  top: 3px;
+}
+
+#characterEffects {
+  width: 100%;
+  margin-top: 6px;
+  margin-bottom: 15px;
+}
+
+#resourceEffects {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.fixedWidth .col1 {
+  width: 220px;
+}
+
+.fixedWidth .col2 {
+  width: 36px;
+}
+
+.fixedWidth .col3 {
+  width: 28px;
+}
+
+.fixedWidth .col4 {
+  width: 144px;
+}
+
+.fixedWidth .col5 {
+  width: 42px;
+}
+
+/************************ Curved Box Display **********************************/
+
+.curvedDisplayBox {
+  border: 2px solid #336699;
+  margin: 0 0 20px 0;
+  border-top-right-radius: 6px;  
+  border-top-left-radius: 6px;  
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.displayHeader {
+  height: 26px;
+  background-color: #336699;
+  color: white;
+}
+
+.displayHeader div {
+  padding:2px 8px;
+  display:inline-block;
+}
+
+/************************** New Background Response *****************************************/
+
+.box {
+  position: absolute;
+  left: 400px;
+  top: 10px;
+  bottom: 10px;
+  width: 2px;
+  border: 2px solid #336699;
+}
+
+.verticalBox {
+  border: 1px solid #336699;
+  position: absolute;
+  left: 565px;
+  top: 45px;
+  bottom: 15px;
+  width: 0px;
+}
+
+
+.skillTable td {
+  padding: 0 1em;
+  border-left: 2px solid #336699;
+}
+
+.skillTable td:first-child {
+  border-left: 0;
+}
+
+#DisplayCharacter .backgroundResponse .Right a {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.backgroundResponse {
+  float: left;
+  margin-left: 20px;
+  width: 345px;
+}
+
+.backgroundResponse dl {
+  margin-top: 10px;
+}
+
+/**************************** Background Tags ************************************/
+
+#tagForm label {
+  width: 120px;
+  display: inline-block;
+  font-size: 14px;
+  color: #222244;
+  font-weight: normal;
+}
+
+#tagForm fieldset {
+  border: 2px solid #336699;
+  padding: 2px 4px 4px 6px;
+  border-radius: 4px;
+}
+
+#tagForm legend {
+  padding: 0 5px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #336699;
+}
+
+#tagForm .tagCategory label {
+  width: 95px;
+  text-align: right;
+}
+
+.backgroundTagSection {
+  float: left;
+}
+
+#tagForm .tagCategory {
+  width: 140px;
+  float: left;
+  margin: 0 5px 15px 7px;
+}
+
+#tagForm .tagCategory.Thin {
+  width: 110px;
+}
+
+#tagForm .tagCategory.Thin label {
+  width: 65px;
+}
+
+#tagForm .tagCategory.Wide {
+  width: 262px;
+}
+
+#tagForm .tagCategory.Wide label {
+  width: 100px;
+}
+
+#tagForm .tagCategory.Foreign,#tagForm .tagCategory.Barbarian {
+  width: 155px;
+}
+
+#tagForm .tagCategory.Foreign label,#tagForm .tagCategory.Barbarian label {
+  width: 110px;
+}
+
+#tagForm input[type=checkbox] {
+  position: relative;
+  top: 2px;
+}
+
+#tagForm span.wicket-ajax-indicator {
+  vertical-align: 0;
+  float: right;
+  margin-right: 14px;
+  position: absolute;
+}
+
+.grayBorder {
+  margin-left: 75px;
+}
+
+.ceremonyEntry {
+  margin: 5px 0 10px 0;
+}
+
+.ribbonBonds a {
+  color: Bisque;
+}
+
+.ribbonBonds a.buttonLink {
+  margin: 6px;
+  color: white;
+}
+
+#RibbonItemName {
+  margin-left: 50px;
+  max-width: 350px;
+}
+
+#editCharacterForm label {
+  width: 75px;
+}
+
+#editCharacterForm .checkbox input {
+  margin-left: 94px;
+}
+
+#editBackgroundForm textarea {
+  width: 98%;
+  height: 95px;
+}
+
+#editCharacterButtons a {
+  display: block;
+  margin-bottom: 10px;
+  width: 100px;
+}
+
+.resourceForm fieldset {
+  margin-top:25px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.resourceForm fieldset+div {
+  margin-top:2px;
+}
+
+.resourceForm .checkbox input {
+  margin-left: 10px;
+}
+
+.resourceForm .newStandardForm div.selectorButtons {
+  clear: none;
+  margin: 0px;
+  min-height: auto;
+}
+
+.resourceForm .newStandardForm label.selectorTextField {
+  width: 140px;  
+}
+
+.resourceForm {
+  padding: 10px;
+}
+
+#entryColumn table {
+  margin-top: 15px;
+}
+
+#entryColumn label {
+  width: auto;
+}
+
+#entryColumn img {
+  width: 20px;
+}
+
+#createInventory fieldset {
+  width: 97%;
+}
+
+#createInventory fieldset input {
+  width: 25px;
+}
+
+#createInventory div {
+  clear: none;
+  float: left;
+  margin-top: 0;
+}
+
+#createInventory label {
+  width: 90px;
+}
+
+#createInventory fieldset .Selector input  {
+  width: 50px;
+}
+
+#createInventory .Selector label.rightOfCheckBoxLabel  {
+  width: 210px;
+}
+
+#createInventory .Type select {
+  width: 206px;
+}
+
+#createInventory form {
+  padding: 15px 10px;
+}
+
+#createInventory .Notes input {
+  width: 335px;
+}
+
+#createInventory #clearButtonDiv {
+  clear: left;
+  float: none;
+  padding-top: 15px;
+}
+
+#entryColumn .pdTable .ajaxIndicator span {
+  top: 0px;
+  right: 20px;
+}
+
+#entryColumn .pdTable .ajaxIndicator {
+  padding-right: 24px;
+}
+
+/***************************** Inventory Details Panel *********************/
+
+#inventoryDetails input.Text2 {
+  width: 50px;
+}
+
+#inventoryDetails input.Text3 {
+  width: 70px;
+}
+
+#inventoryDetails select {
+  width: 250px;
+}
+
+#inventoryDetails textarea.Text6 {
+  width: 244px;
+  height: 48px;
+}
+
+#inventoryDetails label {
+  width: 90px;
+}
+
+#inventoryDetails .Right {
+  margin-right: 10px;
+}
+
+#transferResource label {
+  width: 90px;
+}
+
+#transferResource input.Text2 {
+  width: 50px;
+}
+
+#transferResource label.selectorTextField {
+    width: 200px;
+}
+
+.editCharacterButtonColumn {
+  float: right;
+}
+
+.editCharacterButtonColumn a {
+  display: block;
+  margin-bottom: 10px;
+  width: 100px;
+}
+
+#memberTable {
+  margin-left: .5em;
+}
+
+#memberTable table {
+  margin-top: .4em;
+}
+
+#memberTable td{
+  border-left: 1pt solid #336699;
+  padding: 0.2em 0.3em;
+}
+
+#skillOptionList li {
+  margin: 0 0.5em 0.5em 0;
+}
+
+#skillOptionList li:last-child {
+  margin-bottom: 0;
+}
+
+.skillBlock {
+  margin-bottom: 10px;
+}
+
+.newStandardForm div.editSkillBlock {
+  clear: none;
+}
+
+div.editSkillBlock + div.editSkillBlock {
+  margin-left: 20px;
+}
+
+#DisplayCharacter #crewDisplayEmpireCharacter .buttonColumn {
+  margin-top: 5px;
+}
+
+.more hr.listDivider {
+  margin: 15px 5px 10px 58px;
+  border: 1px solid #336699;
+}
+
+.selectSkillOptions .newStandardForm .innerWizardPanel {
+  clear: none;
+}
+
+.selectSkillOptions  .WizardStageLink.Horizontal {
+  height: 380px;
+}

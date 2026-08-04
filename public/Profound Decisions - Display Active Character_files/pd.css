@@ -1,0 +1,1755 @@
+/* main content that affects everything */
+
+body {
+    background-color: #d0d0d0;
+}
+
+#centeredMainDiv {
+    padding-bottom: 36px;
+    background-color: white;
+    width: 974px;
+    font-family: Trebuchet MS;
+    position: relative;
+}
+
+#LeftDropShadow {
+    width: 974px;
+    padding-left: 9px;
+ 	background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/bodydropshadow1.png");
+	background-repeat: repeat-y;
+}
+
+#RightDropShadow {
+    width: 983px;
+    padding-right: 9px;
+ 	background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/bodydropshadow2.png");
+	background-repeat: repeat-y;
+    background-position: right;
+}
+
+#BottomDropShadow {
+    width: 992px;
+    margin: 0 auto;
+    padding-bottom: 9px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/bodydropshadow3.png");
+    background-repeat: no-repeat;
+    background-position: center bottom;
+}
+
+#pageContent {
+    font-size: .9em;
+	color: #222244;
+}
+
+/* Main Page Blocks */
+
+.topCentrePanel {
+    width: 535px;
+}
+
+.topRightPanel {
+    margin-right: 10px;
+}
+
+.realLifeGamingPanel {
+    height: 53px;
+    width: 195px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/logos/reallifegaming.png");
+    background-repeat: no-repeat;
+}
+
+.bookNowPanel {
+    height: 55px;
+    width: 225px;
+    border: 2px solid #c6c6c6;
+    border-radius: 15px;
+}
+
+.bookNowPanel a {
+    margin: 4px 6px 0 0;
+    float: right;
+}
+
+.bookNowPanel h2 {
+    text-align: center;
+    margin: 7px 0 1px 0px;
+    padding: 0;
+    font-size: 14px;
+}
+
+.bookNowPanel h3 {
+    margin: 5px 0 1px 10px;
+    font-size: 13px;
+}
+
+.bookNowPanel a+h3{
+    margin-top: 9px;   
+}
+
+/************* Content that applies on classes used throughout the website **********************************************/
+
+h1, h2, h3 {
+	color: #336699;
+	font-weight: bold;
+}
+
+h1 {
+	font-size: 1.4em;
+	padding: .7em 0;
+}
+
+h2 {
+    font-size: 1.1em;
+    padding: .1em 0 .3em;
+}
+
+.Centered {
+    text-align: center;
+}
+
+.inlineBlock {
+    display: inline-block;
+}
+
+.CenteredOuter {
+    float:left;
+    width:100%;
+    overflow:hidden;
+    position:relative;
+}
+
+.CenteredCentre {
+    clear:left;
+    float:left;
+    position:relative;
+    left:50%;
+}
+
+.CenteredInner {
+   float:left;
+   position:relative;
+   right:50%;
+}
+
+.CenteredBlock {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.CenteredBlock.buttonLink {
+  display: block;
+}
+
+.Relative {
+    position: relative;
+}
+
+.large {
+    font-size: 1.2em;
+}
+
+.Clear {
+    clear: both;
+}
+
+.Left {
+    float: left;
+}
+
+.Right {
+    float: right;
+}
+
+.Red {
+  color: red;
+}
+
+.Inactive {
+    opacity: 0.3;
+}
+
+.displayNone { 
+    display: none;
+}
+
+.hiddenVisibility {
+    visibility: hidden;
+}
+
+.HoverEffect {
+    cursor: pointer;
+}
+
+.Text1 {
+    width: 75px;
+}
+
+.Text2 {
+    width: 115px;
+}
+
+.Text3 {
+    width: 160px;
+}
+
+Select.Text3 {
+  width: 164px;
+}
+
+.Text4 {
+    width: 200px;
+}
+
+.Text5 {
+    width: 250px;
+}
+
+.Text6 {
+    width: 19.5em;
+}
+
+textarea.Text5 {
+    height: 50px;
+}
+
+.IE6Only {
+    display: none;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.tableDisplay {
+    display: table;
+}
+
+img.campaignIcon {
+    width: 180px;
+    padding: 0 .4em;
+}
+
+.grid_4.grid_half {
+    width: 340px;
+}
+
+ul.textList {
+    list-style-type: disc;
+}
+
+.textList {
+    margin-bottom: 1em;
+    margin-left: 1.8em;
+}
+
+.textList li {
+    margin-bottom: .4em;
+    line-height: 1.4;
+}
+
+.grid_6_image {
+    width: 460px;
+}
+
+.multiLineLabel br {
+  margin-bottom: 1em;
+  display: block;
+}
+
+/* wideStyle */
+
+.wideStyle input[type=text], .wideStyle select, .wideStyle input[type=password] {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.wideStyle textarea {
+    padding: 3px;
+}
+
+.flash {
+   animation-name: flash;
+    animation-duration: 0.2s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-play-state: running;
+}
+
+@keyframes flash {
+    from {color: red;}
+    to {color: black;}
+}
+
+
+/* PD Website Tables */
+
+.pdTable {
+    border: 1px solid #336699;
+}
+
+.pdTable tfoot td {
+    background-color: #336699;
+    font-weight: bold;
+}
+
+.pdTable tfoot td a {
+    color: white;
+}
+
+.pdTable .pdTable {
+    border: none;
+}
+
+.pdTable th {
+    background-color: #336699;
+    color: white;
+    font-weight: bold;
+}
+
+.pdTable .oddRow {
+    background-color: #DDEEFF;
+}
+
+.pdTable td.collapse {
+    padding: 0;
+}
+
+.pdTable td, .pdTable th {
+    padding: .4em .2em .5em .2em;
+}
+
+.pdTable tr.narrowRow td, .pdTable tr.narrowRow th {
+    padding: .1em .3em .2em .3em;
+}
+
+.middleAlign td {
+    vertical-align: middle;
+}
+
+td.moneyColumn {
+    text-align: right;
+    white-space: nowrap;
+}
+
+td.dateColumn, th.dateColumn {
+    text-align: center;
+    white-space: nowrap;
+}
+
+td.dateColumn div {
+    margin-top: .4em;
+    margin-bottom: .4em;
+}
+
+.checkboxColumn {
+    text-align: center;
+}
+
+.checkboxColumn img {
+    width: 14px;
+    height: 12px;
+}
+
+.rightBorderOn {
+    padding-right: 10px;
+    margin-right: 0px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/verticalstrip.png");
+    background-repeat: repeat-y;
+    background-position: right;
+}
+
+
+.leftBorderOn {
+    margin-left: 9px;   
+}
+
+.horizontalRule {
+    margin: 5px auto;
+    width: 95%;
+    height: 1px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/horizontalstrip.png");
+    background-repeat: repeat-x;
+}
+
+.verticalRule {
+    width: 1px;
+    float: left;
+}
+
+.topButton {
+    margin-right: 1em;
+    margin-top: 20px;
+}
+
+.hover {cursor: pointer;}
+
+.sorted-asc {}
+.sorted-desc {}
+.jsascarrow {display: none;}
+.jsdescarrow {display: none;}
+
+
+.tableAutoColour > tbody > tr:nth-child(even) {
+    background-color: #FFF;
+}
+
+.tableAutoColour > tbody > tr:nth-child(odd) {
+    background-color: #DDEEFF;
+}
+
+.tableAutoColour > tbody > tr.openTicket {
+    background-color: #d5cef7;
+}
+
+
+
+/************************ Buttons ***************/
+.buttonLink {
+  display: inline-block;
+  padding: 4px 9px;
+  line-height: 1;
+  border-radius: 11px;
+  font-weight: bold;
+  font-size: 12px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	color: white;
+	border: solid 1px #336699;
+	background: #7799BB;
+	background: linear-gradient(#7799BB, #336699);
+	background: -webkit-gradient(linear, left top, left bottom, from(#7799BB), to(#336699));
+	background: -moz-linear-gradient(top,  #7799BB,  #336699);
+}
+
+.buttonLink:hover {
+	background: #88AACC;
+	text-decoration: none;
+	background: linear-gradient(#88AACC, #5588BB);
+	background: -webkit-gradient(linear, left top, left bottom, from(#88AACC), to(#5588BB));
+	background: -moz-linear-gradient(top,  #88AACC,  #5588BB);
+}
+
+.buttonLink:active {
+  text-decoration: none;
+	background: #225588;
+	background: linear-gradient(#225588, #6688AA);
+	background: -webkit-gradient(linear, left top, left bottom, from(#225588), to(#6688AA));
+	background: -moz-linear-gradient(top,  #225588,  #6688AA);
+	position: relative;
+	top: 1px;
+}
+
+.buttonLink:disabled {
+  opacity: .5;
+}
+
+.PDLineLabel p:last-of-type {
+  margin-bottom: 0;
+}
+
+.RedButton .buttonLink, .RedButton.buttonLink {
+	border: solid 1px #703333;
+	background: #D80000;
+	background: linear-gradient(#D80000, #900000);
+	background: -webkit-gradient(linear, left top, left bottom, from(#D80000), to(#900000));
+	background: -moz-linear-gradient(top,  #D80000,  #900000);
+}
+
+.RedButton .buttonLink:hover, .RedButton.buttonLink:hover {
+	background: #FF0000;
+	background: linear-gradient(#FF0000, #B80000);
+	background: -webkit-gradient(linear, left top, left bottom, from(#FF0000), to(#B80000));
+	background: -moz-linear-gradient(top,  #FF0000,  #B80000);
+}
+
+.RedButton .buttonLink:active, .RedButton.buttonLink:active {
+  background: #580000;
+	background: linear-gradient(#580000, #A80000);
+	background: -webkit-gradient(linear, left top, left bottom, from(#580000), to(#A80000));
+	background: -moz-linear-gradient(top,  #580000,  #A80000);
+}
+
+.loginForm .buttonLink, #logOut .buttonLink {
+  line-height: .9;
+  margin-top: 3px;
+  margin-left: 1px;
+}
+
+.rightNavigation a.buttonLink {
+  width: 175px;
+  margin-bottom: 10px;
+}
+
+.rightNavigation input.buttonLink {
+  width: 195px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+/************************************** Ajax Indicators *********************************************/
+
+.buttonColumn div.ajaxIndicator {
+  display: block;
+}
+
+div.ajaxIndicator {
+  padding-right: 20px;
+  position: relative;
+  display: inline-block;
+}
+
+div.ajaxIndicator span.wicket-ajax-indicator {
+  position: absolute;
+  right: 14px;
+  top: 3px;
+}
+
+
+span.wicket-ajax-indicator {
+    width: 0;
+}
+
+/************************ Lists ***************/
+
+ul.KeyPointList {
+    margin: .2em 0 .2em;
+    list-style: disc;
+}
+
+.KeyPointList li {
+    font-weight: bold;
+    margin: .4em 0 .5em 1.2em;
+}
+
+ul.KeyPointList + p {
+    margin-top: .4em;
+}
+
+ul.PlainList {
+    margin-top: 0;
+    padding-top: 0;
+    margin-bottom: 1em;
+    list-style: none;
+}
+
+ul.PlainList P {
+    font-size: 1em;
+}
+
+p + ul.PlainList {
+    margin-top: .4em;
+}
+
+ul.paddedList li {
+    margin-top: 0.3em;
+}
+
+ul.paddedList {
+    margin-bottom: 1em;
+}
+
+ul.tableList li+li {
+    margin-top: .5em;
+}
+
+img.sideBar {
+  margin-bottom:40px;
+}
+
+/* borders */
+
+.grayBorder {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 18px;
+	background-repeat: no-repeat;
+}
+
+.border540x220 {
+    height: 184px;
+    width: 504px;
+ 	background-image: url("//www.profounddecisions.co.uk/resources/images/borders/540x220.png");
+}
+
+
+.border460x200 {
+    height: 164px;
+    width: 424px;
+ 	background-image: url("//www.profounddecisions.co.uk/resources/images/borders/460x200.png");
+}
+
+/* PD Website Forms */
+
+input.invalid, select.invalid {
+    border-color: #C11B17 !important;
+}
+
+input[type|="checkbox"].invalid {
+    color: #C11B17 !important;
+}
+
+input[type="submit"].graceful {
+    margin-top: .6em;
+    margin-right: 1em;
+}
+
+/* Form Fields  */
+
+.standardForm select, .standardForm textarea, .standardForm input[type=text], .standardForm input[type=password] {
+    -webkit-border-radius: 3px;
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-padding-end: 1px;
+    -webkit-padding-start: 1px;
+    background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+    background-position: center right;
+    background-repeat: no-repeat;
+    color: #555;
+    border: 2px solid #336699;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.standardForm Select {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.standardForm Select.Text5, .standardForm textarea.Text5 {
+  width: 270px;
+}
+
+.standardForm input[type=text], .standardForm input[type=password] {
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  text-overflow: ellipsis;
+}
+
+.standardForm fieldset {
+    border-top: 1px solid #336699;
+    clear: both;
+    padding: 10px;
+    width: 90%
+}
+
+.standardForm fieldset > div {
+    clear: left;
+    margin-top: 6px;
+    min-height: 26px;
+}
+
+.standardForm fieldset > div.checkbox {
+    min-height: 22px;
+}
+
+.standardForm legend {
+    color: #336699;
+    font-size: 120%;
+    padding: 0px 5px;
+}
+
+.standardForm label {
+    text-align: right;
+    float: left;
+    padding: 3px 7px;
+    width: 140px;
+}
+
+.standardForm .narrow label {
+  width: 100px;
+}
+
+.standardForm fieldset span {
+    float: left;
+    padding: 3px 7px;  
+}
+
+.standardForm fieldset .header span {
+  padding: 0;
+  padding-right: 15px;
+  float: none;
+}
+
+.standardForm .rightOfCheckboxLabel {
+    float: left;
+    text-align: left;
+    width: auto;
+}
+
+div.checkbox {
+    min-height: 22px;
+}
+
+.checkbox label {
+    float: left;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.checkbox input {
+    margin-left: 154px;
+    float: left;
+    line-height: 1;
+    margin-top: .5em;
+}
+
+#resetPassword label {
+    width: 65px;
+}
+
+#resetPassword fieldset {
+    width: 100%;
+}
+
+.standardForm span.tooltip, .newStandardForm span.tooltip {
+    clear: right;
+    display: block;
+    float: right;
+    margin-right: 8px;
+    color: #336699;
+    background-color: #DDEEFF;
+    border: 1px solid #336699;
+    width: 300px;
+    font-size: 0.8em;
+    padding: 5px 5px;
+    text-align: center;
+}
+
+.previousButton {
+    margin-top: 10px;
+}
+
+.nextButton {
+    float: right;
+    margin-right: 50px;
+    margin-top: 10px;
+}
+
+.paymentMethod .nextButton {
+    margin-top: 0;
+    margin-right: 5px;
+}
+
+/* Feedback */
+
+#modalFeedback ul {
+    margin: 10px 0 0 0;
+}
+
+div.feedbackPanel {
+    padding: .4em;
+    border-radius: 6px;
+    margin: 0 3px .5em;
+    border: 1px solid #FFCF0F;
+    background-color: #FFFFDE;
+}
+
+div.feedbackPanel .Image {
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: 5px 5px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/icons/exclamation.png");   
+    float: left;
+}
+
+div.feedbackPanel ul {
+    margin: 2px 10px 16px 55px;
+    list-style-type: disc;
+    list-style-position:inside;
+    font-weight: bold;
+    min-height: 26px;
+}
+
+div.feedbackPanel p {
+    margin: 0;
+}
+
+/* Feedback info */
+
+.feedbackInfo div.feedbackPanel {
+    border: 1px solid #339966;
+    background-color: #CCFF99;
+}
+
+.feedbackInfo div.feedbackPanel div.Image {
+    background-image: url("//www.profounddecisions.co.uk/resources/images/icons/accept.png");
+    background-position: 2px 0px;
+}
+
+/************* Specific content repeated on multiple pages ***********************************************************/
+
+#topStrip {
+    height: 53px;
+    padding: 19px 5px;
+}
+
+#bottomRule {
+    margin-top: 12px;
+}
+
+#RightLogo {
+    height: 53px;
+    width: 195px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/logos/reallifegaming.png");
+}
+
+/* Main menu CSS */
+
+.shadowMenu {
+    height: 40px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/bottomshadow.png");
+    background-repeat: repeat-x;
+	background-position: bottom;
+}
+
+#leftShadow {
+    height: 47px;
+    border: 1px solid red;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/leftedgeshadow.png");
+    background-repeat: no-repeat;
+    background-position: top left;
+}
+
+.menu {
+    position: absolute;
+    z-index: 99;
+    height: 28px;
+    right: 0;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/verticalstrip.png");
+    background-repeat: repeat-x;
+}
+
+.menu li {
+    float: left;
+    position: relative;
+    height: 28px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/chisel.png");
+    background-repeat: repeat-y;
+    background-position: right;
+}
+
+.menu li a, .menu li span {
+    color: white;
+    font-weight: bold;
+    font-size: .9em;
+    display: block;
+    padding: 6px 12px 0px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+#myAccountMenuHead {
+    width: 106px
+}
+
+.menu li li, .menu li li.lastElement {
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/verticalstrip.png");
+    background-repeat: repeat-x;
+    width: 98%;
+    margin-left: 1px;
+}
+
+.menu li.lastElement {
+    background: none;
+}
+
+.menu ul {
+    display: none;
+    position: relative;
+}
+
+.menu li:hover > ul {
+    display: block;
+    position: absolute;
+    left: -1px;
+    top: 28px;
+}
+
+#SecondRule {
+    display: none;
+}
+
+#subMenu {
+    left: 0;
+    bottom: 7px;
+}
+
+/* Login Panel */
+
+.loginForm label {
+    font-size: 11px;
+}
+
+.loginForm a {
+    color: #336699;
+    text-decoration: underline;
+    font-size: 11px;
+}
+
+.loginForm {
+    position: relative;
+    height: 53px;
+    width: 205px;
+}
+
+.loginForm label, .loginForm input, .loginForm a {
+    position: absolute;
+}
+
+.loginForm label {
+    text-align: left;
+    float: none;
+    padding: 0px;
+    width: auto;
+}
+
+.loginForm .absoluteColumn2 {
+    left: 82px;
+}
+
+.loginForm .absoluteColumn3 {
+    left: 164px;
+}
+
+.loginForm input {
+    top: 15px;
+}
+
+.loginForm a {
+    top: 40px;
+    white-space: nowrap;
+}
+
+.loginForm input.absoluteColumn3 {
+    top: 12px;
+}
+
+#logOut {
+  height: 53px;
+  font-size: 14px;
+  padding-top: 13px;
+}
+
+#logOut a.buttonLink {
+  margin-left: 4px;
+}
+
+#logOut #logOutCentre {
+  border: 1px solid green;
+}
+
+#logOut #name {
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.noLogin {
+    margin: .5em 0 0 0;
+}
+
+.noLogin p {
+    margin: 0 0 .1em 0;
+    padding: 0;
+    font-size: .75em;
+}
+
+/* Right Navigation */
+
+.rightNavigation img {
+    margin-top: .5em;
+}
+
+.rightNavigation #submitDowntime img {
+    margin-top: 0;
+}
+
+/* Progress Bar */
+.progressBar {
+    width: 300px;
+    margin: 15px 0 0 125px;
+}
+
+/* Left Navigation */
+
+/************************ Left Navigation Bar ***************/
+
+#facebookLink img {
+    width: 99px;
+}
+
+#LeftNavigationBar {
+    margin: 17px 0;
+    padding: 5px 10px;
+    border: 2px solid #336699;
+    width: 190px;
+}
+
+#LeftNavigationBar a, #LeftNavigationBar span {
+    display: block;
+    margin-bottom: .5em;
+}
+
+#LeftNavigationBar span em {
+    font-style: normal;
+    font-weight: bold;
+}
+
+#LeftNavigationBar h1 {
+    text-align: right;
+}
+
+#LeftNavigationBar a.CurrentPage {
+    color: #000000;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#LeftNavigationBar h1 {
+    display: none;
+}
+
+.leftNavigation ul {
+    padding-bottom: .3em;
+}
+
+.leftNavigation li {
+    padding-bottom: .3em;
+}
+
+/* footer Panel */
+
+#footerPanel .inlineBlock h3, #footerPanel .inlineBlock a {
+  display: inline-block;
+}
+
+#footerPanel .inlineBlock a {
+  margin-left: 5px;
+  font-size: .75em;
+}
+
+#footerPanel .inlineBlock span {
+  margin-left: 5px;
+  margin-right: 50px;
+}
+
+#footerPanel .inlineBlock div {
+  margin-left: 5px;
+  display: inline-block;
+  vertical-align: -15px;
+}
+
+#footerPanel {
+    margin-top: 10px;
+    font-size: .9em;
+    color: white;
+    height: 164px;
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/footer.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+#footerPanel .grid_3 div {
+    padding: 12px 2px 6px 0px;
+}
+
+#footerPanel .grid_3:first-child div {
+    padding-left: 10px;
+}
+
+#footerPanel h2 {
+    margin-top: 0px;
+}
+
+#footerPanel h3 {
+    margin: 5px 0;
+}
+
+#footerPanel img {
+    margin-top: .3em;
+}
+
+#footerPanel a {
+    display: block;
+    margin-top: .3em;
+    text-decoration: underline;
+    color: white;
+}
+
+#footerPanel #newsBlock a {
+    display: inline;
+}
+
+#footerPanel a + h3 {
+    margin-top: 1.2em;
+}
+
+#footerPanel p a {
+    display: inline;
+}
+
+/* Terms and Conditions */
+#tAndC {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#tAndCGraphics img {
+    width: 48px;
+    height: 48px;
+    margin: 5px 8px 8px 0px;
+    display: block;
+}
+
+#tAndC img {
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
+#tAndC a {
+    font-size: .8em;
+    float: left;
+    color: #222244;
+}
+
+.topRule {
+    width: 100%;
+    height: 4px;
+ 	background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/toprule.png");
+	background-repeat: repeat-x;
+}
+
+/* Shopping Basket */
+
+#shoppingBasket {
+    width: 220px;
+    margin-bottom: 5px;
+}
+
+#shoppingBasket th a {
+    float: right;
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+.subTotalLine, .totalLine, .checkoutLine {
+    border-top: 1px solid #336699;
+}
+
+#shoppingBasket .checkoutLine td {
+    text-align: center;
+}
+
+#shoppingBasket .column1 {
+    width: 152px;
+}
+
+#shoppingBasket .column2 {
+    width: 48px;
+}
+
+#shoppingBasket .eventBreakdown {
+    padding: .4em 0 .5em 0;
+}
+
+#shoppingBasket .eventBreakdown span {
+    padding: .4em .3em;
+}
+
+#shoppingBasket .eventBreakdown table {
+    margin-top: .1em;
+}
+
+#shoppingBasket .eventBreakdown td {
+    padding-top: 0.1em;
+    padding-bottom: 0;
+}
+
+#shoppingBasket .eventBreakdown .column1 {
+    padding: 0 .1em 0 .8em;
+}
+
+
+/* Photo div */
+
+.photoDiv {
+    position: relative;
+    width: 974px;
+}
+
+.standardPhoto {
+    background-image: url("//www.profounddecisions.co.uk/resources/images/photos/topstrips/pd.jpg");
+    height: 227px;
+}
+
+.stripOnly {
+    background-image: url("//www.profounddecisions.co.uk/resources/images/colourstrips/shadows/verticalstripwithshadow.png");
+    background-repeat: repeat-x;
+    background-position: 0 3px;
+    height: 38px;
+}
+
+.stripOnly .shadowMenu {
+    display: none;
+}
+
+.photoDiv.print {
+    width: 960px;
+    margin-left: 7px;
+    margin-right: 7px;
+}
+
+div.wicket-modal h3.w_captionText {
+  font-family: Trebuchet MS;
+}
+
+div.wicket-modal div.w_content_3 {
+  border: 0
+}
+
+div.wicket-modal div.feedbackError div, div.feedbackWarning div {
+  font-family: Trebuchet MS;
+}
+
+/************** Modal dialogue content **************/
+
+.PDModalQuery {
+  margin: 0 5px 6px 3px;
+}
+
+.PDModalQuery p {
+  font-size: 1.1em;
+}
+
+
+/************* Specific content for single page *************************************************************************/
+
+/* Payments Table */
+
+#paymentHistory th.column2 {
+    min-width: 12em;
+}
+
+#paymentHistory th.column1 {
+    width: 5em;
+}
+
+#paymentHistory th.column3, #paymentHistory th.column4, #paymentHistory th.column5 {
+    width: 5em;
+}
+
+/* purchase Table */
+
+#purchaseTable {
+    margin-right: 1em;
+}
+
+#purchaseItems th.column1 {
+    min-width: 22em;
+}
+
+#purchaseItems th.column2 {
+    width: 5em;
+}
+
+#purchaseTotal {
+    margin-top: .5em;
+    border: none;
+    width: 100%;
+}
+
+#purchaseTotal .columnTotalDescrition {
+    text-align: right;
+    padding-right: 1em;
+    font-weight: bold;
+}
+
+#purchaseTotal td.columnTotalAmount {
+    width: 5em;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+/* About Us Page */
+
+.staffPhoto div {
+    text-align: center;
+    margin-top: .6em;
+}
+
+div.staffPhoto {
+    margin-bottom: 20px;
+}
+
+div div.staffPhoto:first-child img {
+    margin: 0 0 0 0;
+}
+
+.staffPhoto img {
+    width: 165px;
+    display: block;
+    margin: 0 0 0 28px;
+}
+
+/* Contact Us Page */
+
+div#contactOther {
+	padding-left: .6em;
+}
+
+.contactEmailImage {
+    float: left;
+    margin-top: .5em;
+    margin-right: 12px;
+}
+
+#contactEmail .Clear {
+    margin: 15px 0 20px;
+}
+
+.contactEmailGroup p {
+    float: left;
+    display: block;
+    width: 305px;
+    clear: none;
+}
+
+#contactOther .horizontalRule, #contactEmail .horizontalRule {
+    margin: 25px auto;
+}
+
+/* News */
+
+#NewsImage {
+    margin-left: 95px;
+}
+
+.newsDate {
+    float: right;
+    color: #336699;
+    font-weight: bold;
+    line-height: 1.45em;
+    padding-right: 15px;
+}
+
+#newsArchive h2 {
+    display: inline;
+}
+
+/* Terms and Conditions */
+
+.termsAndConditions li {
+    margin-left: 1.4em;
+    margin-bottom: .7em;
+    line-height: 1.4em;
+}
+
+/* Login */ 
+
+#registerOrLogin img.horizontalRule {
+    margin: 5px 0;
+    width: 90%;
+}
+
+#registerOrLogin img.verticalRule {
+    height: 9em;
+}
+
+#registerOrLogin #registerLink {
+    display: none;
+}
+
+/* Basket */
+
+#basketModifiers {
+    margin: 3px 0;
+}
+
+#basketModifiers label {
+  display: block;
+  width: 450px;
+  float: left;
+  margin-top: 10px;
+  padding: 0;
+  text-align: inherit;
+}
+
+#basketModifiers span.wicket-ajax-indicator {
+  top: 12px;
+}
+
+#basketModifiers input[type=Checkbox] {
+    margin: 15px 5px 0 0;
+}
+
+#basketModifiers input[type=text] {
+    margin: 10px 5px 0 0;
+}
+
+#basketModifiers input[type=image] {
+    margin: 6px 0 0 8px ;
+}
+
+/* Home Page */
+.eventList {
+  list-style: disc;
+  margin-left: 20px;
+}
+.eventList li {
+  margin-bottom: 5px;
+}
+
+.homePage a.buttonLink {
+  width: 75px;
+  margin-left: 10px;
+}
+
+/* Empire Page */
+
+#centeredMainDiv .empirePhoto {
+    background-image: url("//www.profounddecisions.co.uk/resources/images/photos/topstrips/empire-deep.jpg");
+    height: 480px;
+}
+
+.gameColumns {
+    margin-top: 1em;
+}
+
+.gameColumns h2 {
+    margin-bottom: .5em;
+}
+
+.gameColumns div div {
+    margin-bottom: 1em;
+}
+
+
+/* Table Viewer */
+
+table.viewerTable + table.viewerTable {
+  margin-left: 50px;
+}
+
+.viewerTable td {
+    padding: 0.2em 0.6em 0.2em 0.4em;
+}
+
+.viewerTable tr td:first-child {
+    padding-right: 0.3em;
+    text-align: right;
+    color: #336699;
+}
+
+/* Account Summary */
+
+#AccountSummaryContactDetails img {
+    margin: .5em;
+}
+
+#AccountSummaryContactDetails div {
+    margin-bottom: .3em;
+}
+
+#AccountSummaryContactDetails div div:first-child {
+    margin-bottom: .8em;
+}
+
+#AccountSummaryContactDetails div:first-child {
+    margin-bottom: .8em;
+}
+
+/* Character Listing */
+
+.characterListing {
+    margin-top: .2em;
+}    
+
+.characterListing + .characterListing {
+    margin-top: 1.5em;
+}
+
+/* Dialogues */
+
+input.dialogueSubmitButton {
+    margin-top: 0.5em;
+}
+
+div.dialogue {
+    display: none;
+}
+
+/****************************** Tooltips ************************************/
+
+.hovertip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted #336699; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.hovertip .hovertiptext {
+    visibility: hidden;
+    width: 400px;
+    background-color: #DDEEFF;
+    color: black;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    font-size: .75em;
+    border: 2px solid #336699;
+    padding: .5em 1em;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+.hovertip .hovertiptext {
+    width: 400px;
+    bottom: 100%;
+    left: 50%; 
+    margin-left: -200px; /* Use half of the width (120/2 = 60), to center the tooltip */
+}
+
+.hovertip.below .hovertiptext {
+    top: 130%;
+    bottom: auto;
+}
+
+.hovertip.leftside .hovertiptext {
+    top: -75%;
+    bottom: auto;
+	right: 120%;
+	left: auto;
+	margin-left: 0;
+}
+
+.hovertip .hovertiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #336699 transparent transparent transparent;
+}
+
+.hovertip.below .hovertiptext::after {
+    top: auto;
+    bottom: 100%; /* At the bottom of the tooltip */
+    border-color: transparent transparent #336699 transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.hovertip:hover .hovertiptext {
+    visibility: visible;
+}
+
+/********************************* Downtime Pages ************************************/
+
+table.downtimeTable {
+    border: 2px solid #336699;
+    border-spacing: 0;
+    border-collapse: separate;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+table.downtimeTable td {
+    padding: .25em .4em;
+}
+
+table.downtimeTable td.title {
+    background-color: #336699;
+    color: white;
+    font-weight: bold;
+    width: 5.5em;
+}
+
+table.downtimeTable table {
+    border: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+table.downtimeTable table td {
+    padding: 0.3em 0;
+    line-height: 1.1;
+}
+
+/********************************* New Form Controls ************************************/
+
+.newStandardForm select, .newStandardForm textarea, .newStandardForm input[type=text], .newStandardForm input[type=password] {
+    -webkit-border-radius: 3px;
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-padding-end: 1px;
+    -webkit-padding-start: 1px;
+    background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+    background-position: center right;
+    background-repeat: no-repeat;
+    color: #555;
+    border: 2px solid #336699;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 2px;
+}
+
+.newStandardForm Select {
+    text-overflow: ellipsis;
+}
+
+
+.newStandardForm input[type=text], .newStandardForm input[type=password] {
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  text-overflow: ellipsis;
+}
+
+.newStandardForm fieldset {
+    border-top: 1px solid #336699;
+    clear: both;
+    padding: 10px;
+    width: 90%
+}
+
+.newStandardForm div {
+    clear: left;
+    margin-top: 6px;
+    min-height: 26px;
+}
+
+.newStandardForm div.checkbox {
+    min-height: 22px;
+}
+
+.newStandardForm legend {
+    color: #336699;
+    font-size: 120%;
+    padding: 0px 5px;
+}
+
+.newStandardForm label {
+    text-align: right;
+    float: left;
+    padding: 3px 7px;
+    width: 140px;
+}
+
+.newStandardForm.input20 input {
+    margin-left: 20px !important;
+}
+
+.newStandardForm.labelAuto label {
+    width: auto;
+}
+
+.newStandardForm.label80 label {
+    width: 80px;
+}
+
+.newStandardForm .rightOfCheckboxLabel {
+    float: left;
+    text-align: left;
+    width: auto;
+}
+
+.newStandardForm .checkbox label {
+    float: left;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.newStandardForm .checkbox input {
+    margin-left: 154px;
+    float: left;
+    line-height: 1;
+}
+
+.newStandardForm .overheadLabels label {
+  text-align: left;
+  width: auto !important;
+  padding-left: 0;
+  padding-bottom: 0;
+}
+
+.newStandardForm label.selectorTextField {
+  width: auto;
+  height: 20px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.newStandardForm div.selectorButtons {
+  clear: none;
+  margin-top:0px;
+  float: left;
+}
+
+.newStandardForm .formText {
+    color: #336699;
+    font-weight: bold;
+    display: inline-block;
+    float: left;
+    margin-top: 3px;
+}
+
+.newStandardForm .overLabel {
+	width: auto;
+}
+
+.newStandardForm.treasureForm input, .newStandardForm.treasureForm select {
+	margin-top: 0;
+}
+
+.newStandardForm.treasureForm table {
+	margin-right: 10px;
+}
+
+div a span {
+  line-height: 1;
+}
+
+.width100 a.buttonLink, .width100 input.buttonLink {
+  width: 100px;
+}
+
+.width750 {
+  width: 750px;
+}
+
+.width50 {
+  width: 50px;
+}
+
+td.centre, th.centre {
+  text-align: center;
+}
+
+.rightNavigation a.buttonLink.openTickets {
+	margin-bottom: 0;
+	width: 20px;
+	padding: 1px 8px 2px;
+}
+
+#shoppingBasket .eventBreakdown .ajaxIndicator span {
+	padding: 0;
+}
+
+#shoppingBasket div.ajaxIndicator span.wicket-ajax-indicator {
+    right: 18px;
+    top: -7px;
+}

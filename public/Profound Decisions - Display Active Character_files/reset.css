@@ -1,0 +1,101 @@
+/************************ Meyer reset ************************/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+	line-height: 1;
+}
+/* remember to define focus styles! */
+
+:focus {
+	outline: 0;
+}
+body {
+	background: white;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+	content: "";
+}
+blockquote, q {
+	quotes: "" "";
+}
+
+input ,textarea,select {
+    padding: 0;
+    margin: 0;
+}
+
+input[type=text],select,textarea {
+  border: 2px inset;
+}
+
+/*
+input[type=checkbox] {
+    margin-top: .5em;
+}*/
+
+/************************ PD Additions ************************/
+
+ol {
+	list-style: decimal;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+	color: #336699;
+	cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+strong {
+    font-weight: bold;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+p, span, label, input, td {
+    line-height: 1.4;
+}
+
+em {
+    font-style: italic;
+}
+
+sup {
+    font-size: .8em;
+    position: relative;
+    bottom: .4em;
+    left: .2em;
+}
+
+h3 {
+    font-weight: bold;
+}
+
+input[type=submit] {
+    cursor: pointer;
+}

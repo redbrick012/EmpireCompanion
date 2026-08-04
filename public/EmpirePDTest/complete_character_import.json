@@ -1,0 +1,349 @@
+{
+  "authenticated": true,
+  "characters": [
+    {
+      "name": "Iven",
+      "request_url": "https://www.profounddecisions.co.uk/account/characters?2-1.-empireCharacters-characterRepeater-0-characterLink",
+      "final_url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3"
+    },
+    {
+      "name": "Tooken Raam",
+      "request_url": "https://www.profounddecisions.co.uk/account/characters?2-1.-empireCharacters-characterRepeater-1-characterLink"
+    },
+    {
+      "name": "Turi",
+      "request_url": "https://www.profounddecisions.co.uk/account/characters?2-1.-empireCharacters-characterRepeater-2-characterLink"
+    },
+    {
+      "name": "Finn",
+      "request_url": "https://www.profounddecisions.co.uk/account/characters?2-1.-empireCharacters-characterRepeater-3-characterLink"
+    },
+    {
+      "name": "SilverCloud Banner",
+      "request_url": "https://www.profounddecisions.co.uk/account/characters?2-1.-empireGroups-groupRepeater-0-groupLink"
+    },
+    {
+      "name": "SilverGlade",
+      "request_url": "https://www.profounddecisions.co.uk/account/characters?2-1.-empireGroups-groupRepeater-1-groupLink"
+    }
+  ],
+  "character_count": 6,
+  "first_character": {
+    "name": "Iven",
+    "request_url": "https://www.profounddecisions.co.uk/account/characters?2-1.-empireCharacters-characterRepeater-0-characterLink",
+    "final_url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3"
+  },
+  "final_character_url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3",
+  "analysis": {
+    "title": "Profound Decisions - Display Active Character",
+    "headings": [
+      {
+        "tag": "h1",
+        "text": "Iven"
+      },
+      {
+        "tag": "h2",
+        "text": "Bonded Items"
+      },
+      {
+        "tag": "h3",
+        "text": "Points Spent: 14"
+      },
+      {
+        "tag": "h3",
+        "text": "Experience Available for any Character: 0"
+      },
+      {
+        "tag": "h1",
+        "text": "Rituals"
+      },
+      {
+        "tag": "h1",
+        "text": "Spells"
+      }
+    ],
+    "tables": [
+      {
+        "number": 0,
+        "rows": [
+          [
+            "CID",
+            "10123.4"
+          ],
+          [
+            "Nation",
+            "Navarr"
+          ],
+          [
+            "Lineage",
+            "Changeling"
+          ],
+          [
+            "Archetype",
+            "Vine"
+          ],
+          [
+            "Virtue",
+            ""
+          ],
+          [
+            "Banner",
+            "SilverCloud Banner"
+          ],
+          [
+            "Coven",
+            "SilverCloud"
+          ],
+          [
+            "Sect",
+            ""
+          ],
+          [
+            "Territory",
+            "Brocéliande"
+          ],
+          [
+            "Resource",
+            "Military Unit"
+          ],
+          [
+            "Level",
+            "1"
+          ],
+          [
+            "Status",
+            "Played"
+          ],
+          [
+            "Points Spent",
+            "14"
+          ]
+        ]
+      },
+      {
+        "number": 1,
+        "rows": [
+          [
+            "Ribbon",
+            "Item",
+            "Type",
+            "Slot"
+          ]
+        ]
+      }
+    ],
+    "links": [
+      {
+        "text": "",
+        "href": "../home"
+      },
+      {
+        "text": "Logout",
+        "href": "./viewcharacter?3-1.-topCentrePanel-logoutPanel-logout"
+      },
+      {
+        "text": "Tickets",
+        "href": "../event/tickets"
+      },
+      {
+        "text": "Tent Hire",
+        "href": "../tentrental"
+      },
+      {
+        "text": "Event Site",
+        "href": "../eventsite"
+      },
+      {
+        "text": "Empire",
+        "href": "../empire"
+      },
+      {
+        "text": "About Us",
+        "href": "../aboutus"
+      },
+      {
+        "text": "Contact Us",
+        "href": "../contactus"
+      },
+      {
+        "text": "Accessibility",
+        "href": "../accessibility"
+      },
+      {
+        "text": "Equality & Diversity",
+        "href": "../wicket/bookmarkable/uk.co.profounddecisions.website.staticpages.pd.EqualityAndDiversity"
+      },
+      {
+        "text": "Terms & Conditions",
+        "href": "../termsandconditions"
+      },
+      {
+        "text": "Summary",
+        "href": "../account/summary"
+      },
+      {
+        "text": "Payment History",
+        "href": "../account/payments"
+      },
+      {
+        "text": "Recruitment",
+        "href": "../account/recruitment"
+      },
+      {
+        "text": "Characters",
+        "href": "../account/characters"
+      },
+      {
+        "text": "Details",
+        "href": "./viewcharacter?3-1.-controller-tabSelector-tabRepeater-0-selectTab"
+      },
+      {
+        "text": "Skills",
+        "href": "./viewcharacter?3-1.-controller-tabSelector-tabRepeater-1-selectTab"
+      },
+      {
+        "text": "Ribbons Owned",
+        "href": "./viewcharacter?3-1.-controller-tabSelector-tabRepeater-2-selectTab"
+      },
+      {
+        "text": "Rituals",
+        "href": "./viewcharacter?3-1.-controller-tabSelector-tabRepeater-4-selectTab"
+      },
+      {
+        "text": "Spells",
+        "href": "./viewcharacter?3-1.-controller-tabSelector-tabRepeater-6-selectTab"
+      },
+      {
+        "text": "Background",
+        "href": "./viewcharacter?3-1.-controller-tabSelector-tabRepeater-8-selectTab"
+      },
+      {
+        "text": "Print Character Sheet",
+        "href": "./viewcharacter?3--controller-repeater-0-tabPanel-printCharacter"
+      },
+      {
+        "text": "Submit Downtime",
+        "href": "./viewcharacter?3-1.-controller-repeater-0-tabPanel-downtime-submitDowntime"
+      },
+      {
+        "text": "Inventory",
+        "href": "./viewcharacter?3-1.-controller-repeater-0-tabPanel-downtime-inventory"
+      },
+      {
+        "text": "Report Character Death",
+        "href": "./viewcharacter?3-1.-controller-repeater-0-tabPanel-killCharacterButton-button"
+      },
+      {
+        "text": "Retire Character",
+        "href": "./viewcharacter?3-1.-controller-repeater-0-tabPanel-retireCharacterButton-button"
+      },
+      {
+        "text": "56645 - Band of Destiny (Jotun Trinket) ( Jewellery ) Expires just before 2027 Winter Solstice Once per day, you may use the Unstoppable skill without needing to know it and without spending a hero point.",
+        "href": null
+      },
+      {
+        "text": "Magician You are able to cast the three basic spells; detect magic, operate portal and create bond up to four times per day. You may purchase additional spells and mana.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Magical_skills#Magician"
+      },
+      {
+        "text": "Extra spell You may choose one additional spell from the spell list each time you purchase this skill.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Magical_skills#Extra_Spell"
+      },
+      {
+        "text": "Spring lore (4 ranks) You can perform spring rituals and have two spring rituals mastered. Further purchases of this skill improve your mastery of spring magic.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Magical_skills#Realm_Lore"
+      },
+      {
+        "text": "Night lore You can perform night rituals and have two night rituals mastered. Further purchases of this skill improve your mastery of night magic.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Magical_skills#Realm_Lore"
+      },
+      {
+        "text": "Learn Ritual",
+        "href": "./viewcharacter?3-1.-controller-repeater-4-tabPanel-learnRitual"
+      },
+      {
+        "text": "Retrain Ritual",
+        "href": "./viewcharacter?3-1.-controller-repeater-4-tabPanel-retrainRitual"
+      },
+      {
+        "text": "Blessing of New Spring Spring realm (magnitude 2/1) Increase wealth gained from a farm for three seasons and serves as a foundation for other farm rituals.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Blessing_of_New_Spring"
+      },
+      {
+        "text": "Blood and Salt Spring realm (magnitude 12/8) Grants five extra ranks to a fleet taking a raiding action.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Blood_and_Salt"
+      },
+      {
+        "text": "Chirurgeon's Healing Touch Spring realm (magnitude 8/6) Target gains two stay with me uses each day for a season.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Chirurgeon%27s_Healing_Touch"
+      },
+      {
+        "text": "Merciless Wrath of the Reaver Spring realm (magnitude 8/6) Adds three ranks to a military unit that takes a raiding action during the next season.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Merciless_Wrath_of_the_Reaver"
+      },
+      {
+        "text": "Shroud of Mist and Shadow Night realm (magnitude 6/4) Grants a concealing bonus to a military unit that takes a raiding action.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Shroud_of_Mist_and_Shadow"
+      },
+      {
+        "text": "Verdant Bounty of the Twilight Bayou Night realm (magnitude 6/4) Adds five measures to the production of a forest over the next season.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Verdant_Bounty_of_the_Twilight_Bayou"
+      },
+      {
+        "text": "Create Bond You may bond a willing target to a suitable item or group. Other than potions and herbs, most magical items can only be used if the user is bonded to the item. You may also break such a bond if the target or the item is present.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Create_Bond"
+      },
+      {
+        "text": "Detect Magic Discern the level and realm of an enchantment that a single target close enough to touch is under. You can also use this spell to discern the level and realm of a ritual that is being cast if you are close enough to hear the words of the ritual. A referee is required to cast this spell.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Detect_Magic"
+      },
+      {
+        "text": "Heal This spell completely restores all lost hits. It does not affect a limb that has been affected by a CLEAVE or IMPALE call. If you swift-cast this spell it only restores three lost hits.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Heal"
+      },
+      {
+        "text": "Operate Portal You may open a portal to another location, or trace to where a portal was last opened to go to. Magicians can use portals to travel to the Hall of Worlds where they can treat with Eternals as well as using them to travel to other locations in the Empire.",
+        "href": "//www.profounddecisions.co.uk/empire-wiki/Operate_Portal"
+      },
+      {
+        "text": "Terms and Conditions",
+        "href": "../termsandconditions"
+      }
+    ],
+    "forms": [],
+    "inputs": [],
+    "text_blocks": []
+  },
+  "tabs": {
+    "details": {
+      "name": "Details",
+      "url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3-1.-controller-tabSelector-tabRepeater-0-selectTab",
+      "error": "unsupported operand type(s) for +=: 'dict' and 'str'"
+    },
+    "skills": {
+      "name": "Skills",
+      "url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3-1.-controller-tabSelector-tabRepeater-1-selectTab",
+      "error": "unsupported operand type(s) for +=: 'dict' and 'str'"
+    },
+    "ribbons": {
+      "name": "Ribbons Owned",
+      "url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3-1.-controller-tabSelector-tabRepeater-2-selectTab",
+      "error": "unsupported operand type(s) for +=: 'dict' and 'str'"
+    },
+    "rituals": {
+      "name": "Rituals",
+      "url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3-1.-controller-tabSelector-tabRepeater-4-selectTab",
+      "error": "unsupported operand type(s) for +=: 'dict' and 'str'"
+    },
+    "spells": {
+      "name": "Spells",
+      "url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3-1.-controller-tabSelector-tabRepeater-6-selectTab",
+      "error": "unsupported operand type(s) for +=: 'dict' and 'str'"
+    },
+    "background": {
+      "name": "Background",
+      "url": "https://www.profounddecisions.co.uk/empire/viewcharacter?3-1.-controller-tabSelector-tabRepeater-8-selectTab",
+      "error": "unsupported operand type(s) for +=: 'dict' and 'str'"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+#processDowntime .newStandardForm label {
+  width: 85px;
+}
+
+#processDowntime .newStandardForm .checkbox input {
+    margin-left: 100px;
+}

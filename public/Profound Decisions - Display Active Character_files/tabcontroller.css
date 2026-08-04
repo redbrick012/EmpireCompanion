@@ -1,0 +1,94 @@
+/*********************** PD Wizard ************************/
+
+div.innerWizardPanel {
+  padding: 10px;
+}
+
+.TabPanel {
+  margin-top: -2px;
+  border: 2px solid #336699;
+  border-top-right-radius: 8px;
+  
+}
+
+.TabPanel.OpenStep {
+    display: block;
+}
+
+.TabPanel.ClosedStep {
+    display: none;
+}
+
+.Horizontal.TabStep a span {
+  color: black;
+}
+
+a:hover{
+    color:black;
+}
+
+.help {
+    cursor: help
+}
+
+img.help {
+    float: left;
+    width: 36px;
+    margin: 2px 4px 0 0;
+}
+
+a.help {
+    display: block;
+    float: right;
+    margin: 0 8px 0 2px;
+    width: 36px;
+}
+
+a.help img {
+    width: 36px;
+}
+
+/********************** Menu *********************/
+
+ul.tabMenu { 
+  display: inline-block;
+  border-bottom: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+  background-color: #0;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+ul.tabMenu li {
+  display: inline-block;
+  font-size: 1.2em;
+  border-top: 2px solid #336699;
+  border-left: 2px solid #336699;
+  border-right: 2px solid #336699;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: #6699CC;
+  padding-bottom: 0;
+}
+
+ul.tabMenu li.OpenStep {
+  background: white;
+  padding-bottom: 2px;
+}
+
+ul.tabMenu li.OpenStep a {
+  color: #336699;
+}
+
+ul.tabMenu li.ClosedStep a {
+  color: white;
+}
+
+ul.tabMenu li a {
+  color: #333;
+  padding: 2px 12px;
+  display: block;
+  height: 24px;
+  padding-top:6px;
+}

@@ -1,0 +1,25 @@
+var $dialog;
+var $dialogPointer;
+var dialogOpts = {autoOpen: false, modal: true, title: 'Confirm Request', buttons: {'Confirm' : confirmAction, 'Cancel' : cancelAction}};
+$(document).ready(function(){
+$('.graceful').hide();
+$('.gracefulAjaxLink').click(function(event){
+event.preventDefault();
+});
+});
+function enSpan(element) {
+element.text("<span>" + element.text() + "</span>");
+}
+function hideClass(cssClass){
+$('.' + cssClass).hide();
+}
+function showClass(cssClass){
+$('.' + cssClass).show();
+}
+function cancelAction() {
+$dialog.dialog('close');
+}
+function confirmAction() {
+$dialog.dialog('close');
+$dialogPointer.parent('form').submit();
+}

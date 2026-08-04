@@ -1,0 +1,69 @@
+.modal-dialog-overlay {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	z-index: 1001;
+	top: 0;
+	left: 0;
+}
+
+.modal-error .modal-dialog-overlay {
+	z-index: 1005;
+}
+
+.modal-dialog {
+	background-color: white;
+	border-radius: 12px;
+	border: 2px solid #336699;
+	padding-bottom: 15px;
+	box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.75), 0 0 16px 0 rgba(0, 0, 0, 0.75);
+	max-height: 95%;
+	overflow-y: auto;
+}
+
+.modal-dialog .newStandardForm fieldset {
+	width: auto;
+}
+
+.modal-dialogue-user-content {
+	padding: 0 12px;
+}
+
+.modal-dialogue-title-strip {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+	padding: 8px 12px;
+	background-color: #336699;
+	gap: 16px;
+	float: none !important;
+}
+
+.modal-dialogue-title {
+	font-weight: 600;
+	color: white;
+}
+
+.modal-dialogue-title-strip a {
+	margin: 0 !important;
+	width: auto !important;
+}
+
+label.rightOfCheckBoxLabel {
+	width: auto !important;
+}
+
+.modal-dialogue-user-content #characterSearchPanel label, #characterSearchPanel.modalSearchPanel div#characterSearch input.buttonLink {
+	width: auto;
+}
+
+#characterSearchPanel.modalSearchPanel div#characterSearch .Text2 {
+	width: 115px;
+}
