@@ -1040,25 +1040,28 @@ a {
     padding: 12px;
   }
 
-  .character-list {
-    position: absolute;
+.character-list {
+  position: absolute;
 
-    left: 12px;
-    right: 12px;
+  left: 12px;
+  right: 12px;
 
-    top: 122px;
+  top: 75px;
 
-    z-index: 90;
+  z-index: 90;
 
-    max-height: calc(100vh - 145px);
+  max-height: 260px;
 
-    box-shadow:
-      0 8px 30px rgba(0, 0, 0, 0.18);
-  }
+  overflow-y: auto;
 
-  .character-list-items {
-    max-height: calc(100vh - 210px);
-  }
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+.character-list-items {
+  max-height: 200px;
+  overflow-y: auto;
+}
 
   .character-detail {
     width: 100%;
