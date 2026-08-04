@@ -101,8 +101,9 @@ async function getBrowserContext() {
             "[Empire Companion] No saved PD session found."
         );
     }
+
 browser = await chromium.launch({
-    headless: process.env.RENDER === "true",
+    headless: true, 
 });
 
     context = await browser.newContext({
