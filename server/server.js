@@ -31,13 +31,14 @@ const PD_CHARACTERS_URL =
 
 const PD_BASE_URL =
     "https://www.profounddecisions.co.uk";
-
 const SESSION_DIR =
     path.join(process.cwd(), "pd-session");
 
 const STORAGE_FILE =
     path.join(SESSION_DIR, "storage.json");
 
+const IS_LOCAL =
+    process.env.RENDER !== "true";
 if (process.env.PD_STORAGE_STATE) {
 
     if (!fs.existsSync(SESSION_DIR)) {
@@ -116,19 +117,18 @@ async function getBrowserContext() {
         "[Empire Companion] Starting Playwright..."
     );
 
-    if (fs.existsSync(STORAGE_FILE)) {
+  if (IS_LOCAL && fs.existsSync(STORAGE_FILE)) {
 
-        console.log(
-            "[Empire Companion] Loading saved PD session..."
-        );
+    console.log(
+        "[Empire Companion] Loading local PD session..."
+    );
 
-    } else {
+} else {
 
-        console.log(
-            "[Empire Companion] No saved PD session found."
-        );
-    }
-
+    console.log(
+        "[Empire Companion] No local PD session will be used."
+    );
+}
     const isRender =
         process.env.RENDER === "true";
 
@@ -136,12 +136,12 @@ async function getBrowserContext() {
         headless: isRender,
     });
 
-    context = await browser.newContext({
+context = await browser.newContext({
 
-        storageState:
-            fs.existsSync(STORAGE_FILE)
-                ? STORAGE_FILE
-                : undefined,
+    storageState:
+        IS_LOCAL && fs.existsSync(STORAGE_FILE)
+            ? STORAGE_FILE
+            : undefined,
 
         userAgent:
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/149 Safari/537.36",
