@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -102,9 +102,9 @@ async function getBrowserContext() {
         );
     }
 
-    browser = await chromium.launch({
-        headless: false,
-    });
+browser = await chromium.launch({
+    headless: false,
+});
 
     context = await browser.newContext({
 
@@ -1869,7 +1869,160 @@ app.get(
         }
     }
 );
+/*
+==========================================================
+PD LOGIN + IMPORT
+==========================================================
+*/
 
+app.post(
+    "/api/pd/login",
+    async (req, res) => {
+
+        try {
+
+            /*
+            --------------------------------------------------
+            The current backend uses the existing Playwright
+            session rather than sending the PD password
+            through to Profound Decisions.
+            --------------------------------------------------
+            */
+
+            const loggedIn =
+                await checkPDLogin();
+
+            if (!loggedIn) {
+
+                /*
+                Start the normal PD login process.
+                This opens the Playwright browser.
+                */
+
+                await startLogin();
+
+                return res.json({
+
+                    success: false,
+
+                    loginRequired: true,
+
+                    error:
+                        "Please log into Profound Decisions in the browser window that opened.",
+
+                });
+            }
+
+            /*
+            --------------------------------------------------
+            Already logged in.
+            Import the characters.
+            --------------------------------------------------
+            */
+
+            const characterLinks =
+                await getCharacterLinks();
+
+            const ctx =
+                await getBrowserContext();
+
+            const characterPage =
+                await ctx.newPage();
+
+            const characters = [];
+
+            for (
+                const character
+                of characterLinks
+            ) {
+
+                try {
+
+                    const fullCharacter =
+                        await scrapeCharacter(
+                            character,
+                            characterPage
+                        );
+
+                    characters.push(
+                        fullCharacter
+                    );
+
+                    console.log(
+                        `[Empire Companion] ✓ ${character.name}`
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        `[Empire Companion] Failed to scrape ${character.name}:`,
+                        error.message
+                    );
+
+                    characters.push({
+
+                        name:
+                            character.name,
+
+                        details: {},
+
+                        bondedItems: [],
+
+                        skills: [],
+
+                        ribbons: [],
+
+                        rituals: [],
+
+                        spells: [],
+
+                        background: "",
+
+                        sourceUrl:
+                            character.url,
+
+                        updatedAt:
+                            new Date().toISOString(),
+
+                    });
+                }
+            }
+
+            await characterPage.close();
+
+            await saveSession();
+
+            res.json({
+
+                success: true,
+
+                loggedIn: true,
+
+                characters,
+
+                updatedAt:
+                    new Date().toISOString(),
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "[Empire Companion] PD login/import failed:",
+                error
+            );
+
+            res.status(500).json({
+
+                success: false,
+
+                error:
+                    error.message,
+
+            });
+        }
+    }
+);
 
 /*
 ==========================================================
