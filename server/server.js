@@ -30,7 +30,21 @@ const SESSION_DIR =
 
 const STORAGE_FILE =
     path.join(SESSION_DIR, "storage.json");
+if (process.env.PD_STORAGE_STATE) {
+    if (!fs.existsSync(SESSION_DIR)) {
+        fs.mkdirSync(SESSION_DIR, { recursive: true });
+    }
 
+    fs.writeFileSync(
+        STORAGE_FILE,
+        process.env.PD_STORAGE_STATE,
+        "utf8"
+    );
+
+    console.log(
+        "[Empire Companion] Loaded PD session from environment."
+    );
+}
 let browser = null;
 let context = null;
 let page = null;
