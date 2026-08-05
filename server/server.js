@@ -2981,6 +2981,24 @@ app.get(
         }
     }
 );
+
+/*
+==========================================================
+SERVE FRONTEND
+==========================================================
+*/
+
+const frontendPath = path.resolve("dist");
+
+app.use(express.static(frontendPath));
+app.use(
+    (req, res) => {
+        res.sendFile(
+            path.join(frontendPath, "index.html")
+        );
+    }
+);
+
 app.listen(
     PORT,
     "0.0.0.0",
