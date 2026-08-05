@@ -17,7 +17,7 @@ const pool = new Pool({
 });
 
 async function initDatabase() {
-    await db.query(`
+    await pool.query(`
         CREATE TABLE IF NOT EXISTS users (
             id SERIAL PRIMARY KEY,
             username TEXT UNIQUE NOT NULL,
@@ -181,7 +181,7 @@ async function getBrowserContext(userId) {
     let storageState;
 
     const result =
-        await db.query(
+        await pool.query(
             `
             SELECT storage_state
             FROM pd_sessions
@@ -253,7 +253,7 @@ async function saveSession(userId) {
     const storageState =
         await userContext.storageState();
 
-    await db.query(
+    await pool.query(
         `
         INSERT INTO pd_sessions (
             user_id,
@@ -293,7 +293,7 @@ async function saveCharacterCache(userId, characters) {
         );
     }
 
-    await db.query(
+    await pool.query(
         `
         INSERT INTO character_cache (
             user_id,
@@ -2109,7 +2109,7 @@ app.get(
             );
 
             const cached =
-                await db.query(
+                await pool.query(
                     `
                     SELECT
                         characters,
@@ -2207,7 +2207,7 @@ app.post(
                         .slice(2, 10)}`;
 
                 const result =
-                    await db.query(
+                    await pool.query(
                         `
                         INSERT INTO users (username)
                         VALUES ($1)
@@ -2222,7 +2222,7 @@ app.post(
             } else {
 
                 const result =
-                    await db.query(
+                    await pool.query(
                         `
                         SELECT id
                         FROM users
@@ -2535,7 +2535,7 @@ app.get(
                 await checkPDLogin(userId);
             // Try cached characters first
             const cached =
-                await db.query(
+                await pool.query(
                     `
                     SELECT characters, updated_at
                     FROM character_cache
@@ -2804,6 +2804,14 @@ HEALTH
 app.get(
     "/api/health",
     (req, res) => {
+        res.json({
+            success: true,
+            message: "Empire Companion backend is running.",
+            loginInProgress: userLoginInProgress.size > 0
+        });
+    }
+);
+    (req, res) => {
 
         res.json({
 
@@ -2815,15 +2823,15 @@ app.get(
             pdSession:
                 Boolean(context),
 
-            loginInProgress,
+            userloginInProgress,
         });
     }
 );
 app.get(
-    "/api/health/db",
+    "/api/health/pool",
     async (req, res) => {
         try {
-            const result = await db.query(
+            const result = await pool.query(
                 "SELECT NOW() AS time"
             );
 
@@ -2864,7 +2872,7 @@ app.get(
             }
 
             const result =
-                await db.query(
+                await pool.query(
                     `
                     SELECT
                         user_id,
