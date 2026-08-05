@@ -2803,19 +2803,11 @@ HEALTH
 
 app.get(
     "/api/health",
-        (req, res) => {
-
+    (req, res) => {
         res.json({
-
             success: true,
-
-            message:
-                "Empire Companion backend is running.",
-
-            pdSession:
-                Boolean(context),
-
-            userloginInProgress,
+            message: "Empire Companion backend is running.",
+            loginInProgress: userLoginInProgress.size > 0
         });
     }
 );
