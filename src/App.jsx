@@ -1,7 +1,12 @@
-import { useMemo, useState } from "react";
+import {
+    useState,
+    useEffect,
+    useMemo
+} from "react";
 import "./App.css";
 
 const API_URL = "http://localhost:3001";
+const USER_ID_KEY = "empire_companion_user_id";
 const SESSION_KEY = "empire_companion_session_id";
 
 function getSessionId() {
@@ -798,17 +803,78 @@ export default function App() {
         setMobileCharactersOpen,
     ] = useState(false);
 
-    const [pdLogin, setPdLogin] =
-        useState("");
-
-    const [pdPassword, setPdPassword] =
-        useState("");
-
-    const [showPDLogin, setShowPDLogin] =
-        useState(false);
+    const [userId, setUserId] = useState(
+        () => localStorage.getItem(USER_ID_KEY)
+    );
 
     const characters =
         data.characters || [];
+
+    useEffect(() => {
+
+        async function initialiseUser() {
+
+            try {
+
+                const existingUserId =
+                    localStorage.getItem(
+                        USER_ID_KEY
+                    );
+
+                const response =
+                    await fetch(
+                        `${API_URL}/api/auth/session`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                Accept:
+                                    "application/json",
+                            },
+
+                            body: JSON.stringify({
+                                userId:
+                                    Number(userId),
+                            }),
+                        }
+                    );
+
+                const result =
+                    await response.json();
+
+                if (!result.success) {
+                    throw new Error(
+                        result.error ||
+                        "Could not initialise user."
+                    );
+                }
+
+                localStorage.setItem(
+                    USER_ID_KEY,
+                    String(result.userId)
+                );
+
+                setUserId(
+                    result.userId
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to initialise user:",
+                    error
+                );
+
+            }
+
+        }
+
+        initialiseUser();
+
+    }, []);
 
     /*
     ======================================================
@@ -816,36 +882,213 @@ export default function App() {
     ======================================================
     */
 
-    function handlePDSync() {
+    async function handlePDSync() {
 
-        setShowPDLogin(true);
+        try {
 
+            if (!userId) {
+
+                throw new Error(
+                    "No user session is available yet."
+                );
+
+            }
+
+            setLoading(true);
+            setError(null);
+
+            console.log(
+                "[Empire Companion] Starting PD login..."
+            );
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/auth/session`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            Accept:
+                                "application/json",
+                        },
+
+                        body: JSON.stringify({
+                            userId:
+                                Number(userId),
+                        }),
+                    }
+                );
+
+            const result =
+                await response.json();
+
+            console.log(
+                "[Empire Companion] PD login response:",
+                result
+            );
+
+            /*
+            ==============================================
+            LOGIN REQUIRED
+            ==============================================
+            */
+
+            if (result.loginRequired) {
+
+                setError(
+                    "Profound Decisions login window opened. Please log in..."
+                );
+
+                console.log(
+                    "[Empire Companion] Waiting for PD login..."
+                );
+
+                let loggedIn = false;
+
+                for (
+                    let attempt = 0;
+                    attempt < 60;
+                    attempt++
+                ) {
+
+                    await new Promise(
+                        resolve =>
+                            setTimeout(
+                                resolve,
+                                2000
+                            )
+                    );
+
+                    try {
+
+const statusResponse =
+                await fetch(
+                    `${API_URL}/api/auth/status?userId=${Number(userId)}`
+                );
+
+            const status =
+                await statusResponse.json();
+
+            console.log(
+                "[Empire Companion] PD login status:",
+                status
+            );
+
+            if (status.loggedIn) {
+
+                loggedIn = true;
+
+                console.log(
+                    "[Empire Companion] PD login detected. Importing characters..."
+                );
+
+                break;
+            }
+            
+
+
+                    } catch (statusError) {
+
+                        console.error(
+                            "[Empire Companion] Login status check failed:",
+                            statusError
+                        );
+
+                    }
+                }
+
+                if (!loggedIn) {
+
+                    throw new Error(
+                        "Timed out waiting for Profound Decisions login."
+                    );
+
+                }
+
+                setError(null);
+
+                /*
+                ==========================================
+                LOGIN COMPLETE — IMPORT CHARACTERS
+                ==========================================
+                */
+
+                await loadFromBackend();
+
+                return;
+            }
+
+            /*
+            ==============================================
+            ALREADY LOGGED IN
+            ==============================================
+            */
+
+            if (result.success) {
+
+                await loadFromBackend();
+
+                return;
+            }
+
+            throw new Error(
+                result.error ||
+                "Profound Decisions login failed."
+            );
+
+        } catch (err) {
+
+            console.error(
+                "[Empire Companion] PD login failed:",
+                err
+            );
+
+            setError(
+                err?.message ||
+                "Could not start Profound Decisions login."
+            );
+
+        } finally {
+
+            setLoading(false);
+
+        }
     }
-
     /*
     ======================================================
     LOAD FROM BACKEND
     ======================================================
     */
-async function loadFromBackend() {
+    async function loadFromBackend() {
 
-    try {
+        try {
 
-        const response =
-            await fetch(
-                "http://localhost:3001/api/pd/login",
-                {
-                    method: "POST",
+            if (!userId) {
 
-                    headers: {
-                        "Content-Type":
-                            "application/json",
+                throw new Error(
+                    "No user session is available yet."
+                );
 
-                        Accept:
-                            "application/json",
-                    },
-                }
-            );
+            }
+
+            setLoading(true);
+            setError(null);
+
+            const response =
+                await fetch(
+                    `${API_URL}/api/characters?userId=${encodeURIComponent(userId)}`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            Accept:
+                                "application/json",
+                        },
+                    }
+                );
 
             let result;
 
@@ -862,6 +1105,12 @@ async function loadFromBackend() {
 
             }
 
+            /*
+            ==================================================
+            BACKEND RETURNED AN ERROR
+            ==================================================
+            */
+
             if (!response.ok) {
 
                 throw new Error(
@@ -871,18 +1120,15 @@ async function loadFromBackend() {
 
             }
 
-            if (!result?.success) {
-
-                throw new Error(
-                    result?.error ||
-                    "Empire Companion server reported an error."
-                );
-
-            }
+            /*
+            ==================================================
+            VALID CHARACTER DATA
+            ==================================================
+            */
 
             if (
                 !Array.isArray(
-                    result.characters
+                    result?.characters
                 )
             ) {
 
@@ -900,9 +1146,16 @@ async function loadFromBackend() {
                     ),
 
                 updatedAt:
+                    result.updatedAt ||
                     new Date().toISOString(),
 
             };
+
+            /*
+            ==================================================
+            SAVE LOCALLY TOO
+            ==================================================
+            */
 
             saveCachedCharacters(
                 cleanData
@@ -914,14 +1167,26 @@ async function loadFromBackend() {
 
             setConnected(true);
 
-            setShowPDLogin(false);
+
+            /*
+            ==================================================
+            SELECT FIRST CHARACTER
+            ==================================================
+            */
 
             if (
                 cleanData.characters.length > 0
             ) {
 
                 setSelectedName(
-                    cleanData.characters[0].name
+                    current =>
+                        current &&
+                            cleanData.characters.some(
+                                character =>
+                                    character.name === current
+                            )
+                            ? current
+                            : cleanData.characters[0].name
                 );
 
             } else {
@@ -930,10 +1195,30 @@ async function loadFromBackend() {
 
             }
 
+            /*
+            ==================================================
+            TELL US WHETHER DATA IS CACHED
+            ==================================================
+            */
+
+            if (result.cached) {
+
+                console.log(
+                    "[Empire Companion] Loaded characters from server cache."
+                );
+
+            } else {
+
+                console.log(
+                    "[Empire Companion] Loaded fresh characters from PD."
+                );
+
+            }
+
         } catch (err) {
 
             console.error(
-                "Failed to connect to Empire Companion backend:",
+                "[Empire Companion] Failed to load characters:",
                 err
             );
 
@@ -941,7 +1226,7 @@ async function loadFromBackend() {
 
             setError(
                 err?.message ||
-                "Could not connect to Empire Companion server."
+                "Could not load character data."
             );
 
         } finally {
@@ -950,7 +1235,6 @@ async function loadFromBackend() {
 
         }
     }
-
     /*
     ======================================================
     SELECTED CHARACTER
@@ -1106,83 +1390,7 @@ async function loadFromBackend() {
 
             </header>
 
-            {showPDLogin && (
-
-                <div className="pd-login-overlay">
-
-                    <div className="pd-login-card">
-
-                        <h2>
-                            ⚔ Profound Decisions
-                        </h2>
-
-                        <p>
-                            Enter your Profound Decisions
-                            login to import your Empire
-                            characters.
-                        </p>
-
-                        <input
-                            type="text"
-                            placeholder="PD Login"
-                            value={pdLogin}
-                            onChange={
-                                event =>
-                                    setPdLogin(
-                                        event.target.value
-                                    )
-                            }
-                            autoComplete="username"
-                        />
-
-                        <input
-                            type="password"
-                            placeholder="PD Password"
-                            value={pdPassword}
-                            onChange={
-                                event =>
-                                    setPdPassword(
-                                        event.target.value
-                                    )
-                            }
-                            autoComplete="current-password"
-                        />
-
-                        <div className="pd-login-actions">
-
-                            <button
-                                className="secondary-button"
-                                onClick={() =>
-                                    setShowPDLogin(false)
-                                }
-                                disabled={loading}
-                            >
-                                Cancel
-                            </button>
-
-                            <button
-                                className="primary-button"
-                                onClick={() =>
-                                    loadFromBackend()
-                                }
-                                disabled={
-                                    loading
-                                }
-                            >
-
-                                {loading
-                                    ? "⟳ Importing..."
-                                    : "🔐 Login & Import"}
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            )}
+           
 
             {error && (
 

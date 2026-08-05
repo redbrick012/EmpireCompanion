@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
 import { chromium } from "playwright";
@@ -11,11 +13,44 @@ const db = new Pool({
     connectionString: process.env.DATABASE_URL,
 });
 
+async function initDatabase() {
+    await db.query(`
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username TEXT UNIQUE NOT NULL,
+            created_at TIMESTAMPTZ DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS pd_sessions (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            storage_state TEXT NOT NULL,
+            updated_at TIMESTAMPTZ DEFAULT NOW()
+        );
+
+        CREATE TABLE IF NOT EXISTS character_cache (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            characters JSONB NOT NULL DEFAULT '[]'::jsonb,
+            updated_at TIMESTAMPTZ DEFAULT NOW()
+        );
+    `);
+
+    console.log("[Empire Companion] Database tables ready.");
+}
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+initDatabase().catch(error => {
+    console.error(
+        "[Empire Companion] Database initialisation failed:",
+        error
+    );
+});
 
 /*
 ==========================================================
@@ -60,9 +95,15 @@ if (process.env.PD_STORAGE_STATE) {
 }
 
 let browser = null;
-let context = null;
-let page = null;
-let loginInProgress = false;
+
+const userContexts =
+    new Map();
+
+const userPages =
+    new Map();
+
+const userLoginInProgress =
+    new Set();
 
 
 /*
@@ -107,47 +148,83 @@ BROWSER / SESSION
 ==========================================================
 */
 
-async function getBrowserContext() {
+async function getBrowserContext(userId) {
 
-    if (context) {
-        return context;
+    if (!userId) {
+        throw new Error(
+            "A userId is required for the PD session."
+        );
+    }
+
+    if (userContexts.has(userId)) {
+        return userContexts.get(userId);
     }
 
     console.log(
-        "[Empire Companion] Starting Playwright..."
+        `[Empire Companion] Starting PD session for user ${userId}...`
     );
 
-  if (IS_LOCAL && fs.existsSync(STORAGE_FILE)) {
+    if (!browser) {
 
-    console.log(
-        "[Empire Companion] Loading local PD session..."
+        const isRender =
+            process.env.RENDER === "true";
+
+        browser =
+            await chromium.launch({
+                headless: isRender,
+            });
+    }
+
+    let storageState;
+
+    const result =
+        await db.query(
+            `
+            SELECT storage_state
+            FROM pd_sessions
+            WHERE user_id = $1
+            `,
+            [userId]
+        );
+
+    if (result.rows.length > 0) {
+
+        try {
+
+            storageState =
+                JSON.parse(
+                    result.rows[0].storage_state
+                );
+
+            console.log(
+                `[Empire Companion] Loaded stored PD session for user ${userId}.`
+            );
+
+        } catch (error) {
+
+            console.error(
+                `[Empire Companion] Invalid stored session for user ${userId}:`,
+                error.message
+            );
+
+        }
+    }
+
+    const newContext =
+        await browser.newContext({
+
+            storageState,
+
+            userAgent:
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/149 Safari/537.36",
+        });
+
+    userContexts.set(
+        userId,
+        newContext
     );
 
-} else {
-
-    console.log(
-        "[Empire Companion] No local PD session will be used."
-    );
-}
-    const isRender =
-        process.env.RENDER === "true";
-
-    browser = await chromium.launch({
-        headless: isRender,
-    });
-
-context = await browser.newContext({
-
-    storageState:
-        IS_LOCAL && fs.existsSync(STORAGE_FILE)
-            ? STORAGE_FILE
-            : undefined,
-
-        userAgent:
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/149 Safari/537.36",
-    });
-
-    return context;
+    return newContext;
 }
 /*
 ==========================================================
@@ -155,54 +232,124 @@ SAVE SESSION
 ==========================================================
 */
 
-async function saveSession() {
+async function saveSession(userId) {
 
-    if (!context) {
-        return;
-    }
-
-    if (!fs.existsSync(SESSION_DIR)) {
-
-        fs.mkdirSync(
-            SESSION_DIR,
-            {
-                recursive: true,
-            }
+    if (!userId) {
+        throw new Error(
+            "A userId is required to save the PD session."
         );
     }
 
-    await context.storageState({
-        path: STORAGE_FILE,
-    });
+    const userContext =
+        userContexts.get(userId);
+
+    if (!userContext) {
+        return;
+    }
+
+    const storageState =
+        await userContext.storageState();
+
+    await db.query(
+        `
+        INSERT INTO pd_sessions (
+            user_id,
+            storage_state,
+            updated_at
+        )
+        VALUES ($1, $2, NOW())
+
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+            storage_state = EXCLUDED.storage_state,
+            updated_at = NOW()
+        `,
+        [
+            userId,
+            JSON.stringify(
+                storageState
+            ),
+        ]
+    );
 
     console.log(
-        "[Empire Companion] PD session saved."
+        `[Empire Companion] PD session saved for user ${userId}.`
     );
 }
+/*
+==========================================================
+SAVE CHARACTER CACHE
+==========================================================
+*/
 
+async function saveCharacterCache(userId, characters) {
+
+    if (!userId) {
+        throw new Error(
+            "A userId is required to save the character cache."
+        );
+    }
+
+    await db.query(
+        `
+        INSERT INTO character_cache (
+            user_id,
+            characters,
+            updated_at
+        )
+        VALUES ($1, $2, NOW())
+
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+            characters = EXCLUDED.characters,
+            updated_at = NOW()
+        `,
+        [
+            userId,
+            JSON.stringify(characters),
+        ]
+    );
+
+    console.log(
+        `[Empire Companion] Character cache saved for user ${userId}.`
+    );
+}
 
 /*
 ==========================================================
 GET PAGE
 ==========================================================
 */
+async function getPage(userId) {
 
-async function getPage() {
-
-    const ctx =
-        await getBrowserContext();
-
-    if (
-        page &&
-        !page.isClosed()
-    ) {
-        return page;
+    if (!userId) {
+        throw new Error(
+            "A userId is required for the PD page."
+        );
     }
 
-    page =
+    const ctx =
+        await getBrowserContext(userId);
+
+    const existingPage =
+        userPages.get(userId);
+
+    if (
+        existingPage &&
+        !existingPage.isClosed()
+    ) {
+        return existingPage;
+    }
+
+    const newPage =
         await ctx.newPage();
 
-    return page;
+    userPages.set(
+        userId,
+        newPage
+    );
+
+    return newPage;
 }
 
 
@@ -212,13 +359,13 @@ LOGIN CHECK
 ==========================================================
 */
 
-async function checkPDLogin() {
+async function checkPDLogin(userId) {
 
     const currentPage =
-        await getPage();
+        await getPage(userId);
 
     console.log(
-        "[Empire Companion] Checking PD session..."
+        `[Empire Companion] Checking PD session for user ${userId}...`
     );
 
     await currentPage.goto(
@@ -237,7 +384,7 @@ async function checkPDLogin() {
         currentPage.url();
 
     console.log(
-        "[Empire Companion] PD URL after navigation:",
+        `[Empire Companion] PD URL for user ${userId}:`,
         currentUrl
     );
 
@@ -246,7 +393,7 @@ async function checkPDLogin() {
     ) {
 
         console.log(
-            "[Empire Companion] PD redirected to login."
+            `[Empire Companion] User ${userId} is not logged into PD.`
         );
 
         return false;
@@ -260,8 +407,7 @@ async function checkPDLogin() {
             .count();
 
     console.log(
-        "[Empire Companion] Character links found:",
-        characterLinks
+        `[Empire Companion] User ${userId} has ${characterLinks} character links.`
     );
 
     return characterLinks > 0;
@@ -274,21 +420,27 @@ LOGIN
 ==========================================================
 */
 
-async function startLogin() {
+async function startLogin(userId) {
 
-    if (loginInProgress) {
+    if (!userId) {
+        throw new Error(
+            "A userId is required for PD login."
+        );
+    }
+
+    if (userLoginInProgress.has(userId)) {
         return;
     }
 
-    loginInProgress = true;
+    userLoginInProgress.add(userId);
 
     try {
 
         const currentPage =
-            await getPage();
+            await getPage(userId);
 
         console.log(
-            "[Empire Companion] Opening PD login..."
+            `[Empire Companion] Opening PD login for user ${userId}...`
         );
 
         await currentPage.goto(
@@ -301,33 +453,21 @@ async function startLogin() {
             }
         );
 
-        console.log("");
         console.log(
-            "========================================"
+            `[Empire Companion] PD login required for user ${userId}.`
         );
-        console.log(
-            " PD LOGIN REQUIRED"
-        );
-        console.log(
-            "========================================"
-        );
-        console.log(
-            "Login to Profound Decisions in the"
-        );
-        console.log(
-            "browser window that just opened."
-        );
-        console.log("");
-        console.log(
-            "After login, leave the browser open."
-        );
-        console.log(
-            "Empire Companion will detect it."
-        );
-        console.log(
-            "========================================"
-        );
-        console.log("");
+
+        /*
+        --------------------------------------------------
+        IMPORTANT
+
+        On Render this browser is headless, so the user
+        cannot see this window.
+
+        The mobile login flow therefore cannot depend on
+        a visible Playwright browser.
+        --------------------------------------------------
+        */
 
         await currentPage.waitForURL(
             url =>
@@ -343,34 +483,33 @@ async function startLogin() {
         );
 
         console.log(
-            "[Empire Companion] PD login detected."
+            `[Empire Companion] PD login detected for user ${userId}.`
         );
 
-        await saveSession();
+        await saveSession(userId);
 
     } catch (error) {
 
         console.error(
-            "[Empire Companion] Login failed:",
+            `[Empire Companion] Login failed for user ${userId}:`,
             error.message
         );
 
     } finally {
 
-        loginInProgress = false;
+        userLoginInProgress.delete(userId);
     }
 }
-
-
 /*
 ==========================================================
 GET CHARACTER LINKS
 ==========================================================
 */
 
-async function getCharacterLinks() {
+async function getCharacterLinks(userId) {
 
-    const currentPage = await getPage();
+    const currentPage =
+        await getPage(userId);
 
     console.log(
         "[Empire Companion] Loading character list..."
@@ -1645,19 +1784,29 @@ app.get(
 
         try {
 
+            const userId =
+                req.query?.userId;
+
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    error: "userId is required."
+                });
+            }
+
             const loggedIn =
-                await checkPDLogin();
+                await checkPDLogin(userId);
 
             if (!loggedIn) {
-
                 return res.status(401).json({
                     success: false,
-                    error: "Not logged into Profound Decisions."
+                    error:
+                        "Not logged into Profound Decisions."
                 });
             }
 
             const currentPage =
-                await getPage();
+                await getPage(userId);
 
             await currentPage.goto(
                 PD_CHARACTERS_URL,
@@ -1682,7 +1831,6 @@ app.get(
             );
 
             if (!count) {
-
                 return res.status(404).json({
                     success: false,
                     error: "No character links found."
@@ -1735,15 +1883,9 @@ app.get(
             );
 
             res.json({
-
                 success: true,
-
-                character:
-                    firstName,
-
-                url:
-                    currentPage.url(),
-
+                character: firstName,
+                url: currentPage.url(),
                 saved:
                     path.join(
                         SESSION_DIR,
@@ -1777,107 +1919,202 @@ app.get(
 
         try {
 
-            const loggedIn =
-                await checkPDLogin();
+            const userId =
+                req.query?.userId;
 
-            if (!loggedIn) {
+            if (!userId) {
 
-                return res.status(401).json({
-
+                return res.status(400).json({
                     success: false,
+                    error: "userId is required."
+                });
 
-                    error:
-                        "Not logged into Profound Decisions.",
+            }
 
-                    loggedIn: false,
+            /*
+            ==================================================
+            TRY LIVE PD DATA
+            ==================================================
+            */
+
+            const loggedIn =
+                await checkPDLogin(userId);
+
+            if (loggedIn) {
+
+                console.log(
+                    `[Empire Companion] User ${userId} is logged into PD. Loading fresh characters...`
+                );
+
+                const characterLinks =
+                    await getCharacterLinks(userId);
+
+                console.log(
+                    `[Empire Companion] Found ${characterLinks.length} characters.`
+                );
+
+                const ctx =
+                    await getBrowserContext(userId);
+
+                const characterPage =
+                    await ctx.newPage();
+
+                const characters = [];
+
+                for (
+                    const character
+                    of characterLinks
+                ) {
+
+                    try {
+
+                        const fullCharacter =
+                            await scrapeCharacter(
+                                character,
+                                characterPage
+                            );
+
+                        characters.push(
+                            fullCharacter
+                        );
+
+                        console.log(
+                            `[Empire Companion] ✓ ${character.name}`
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            `[Empire Companion] Failed to scrape ${character.name}:`,
+                            error.message
+                        );
+
+                        characters.push({
+
+                            name:
+                                character.name,
+
+                            details: {},
+
+                            bondedItems: [],
+
+                            skills: [],
+
+                            ribbons: [],
+
+                            rituals: [],
+
+                            spells: [],
+
+                            background: "",
+
+                            sourceUrl:
+                                character.url,
+
+                            updatedAt:
+                                new Date().toISOString(),
+
+                        });
+                    }
+                }
+
+                await characterPage.close();
+
+                await saveSession(userId);
+
+                /*
+                Save fresh data to PostgreSQL.
+                */
+
+                await saveCharacterCache(
+                    userId,
+                    characters
+                );
+
+                return res.json({
+
+                    success: true,
+
+                    loggedIn: true,
+
+                    cached: false,
+
+                    characters,
+
+                    updatedAt:
+                        new Date().toISOString(),
+
                 });
             }
 
-            const characterLinks =
-                await getCharacterLinks();
+            /*
+            ==================================================
+            PD NOT LOGGED IN
+            ==================================================
+            */
 
             console.log(
-                `[Empire Companion] Found ${characterLinks.length} characters.`
+                `[Empire Companion] User ${userId} is not logged into PD. Trying character cache...`
             );
 
-            const ctx =
-                await getBrowserContext();
+            const cached =
+                await db.query(
+                    `
+                    SELECT
+                        characters,
+                        updated_at
+                    FROM character_cache
+                    WHERE user_id = $1
+                    `,
+                    [userId]
+                );
 
-            const characterPage =
-                await ctx.newPage();
-
-            const characters = [];
-
-            for (
-                const character
-                of characterLinks
+            if (
+                cached.rows.length > 0 &&
+                Array.isArray(
+                    cached.rows[0].characters
+                ) &&
+                cached.rows[0].characters.length > 0
             ) {
 
-                try {
+                console.log(
+                    `[Empire Companion] Loading cached characters for user ${userId}.`
+                );
 
-                    const fullCharacter =
-                        await scrapeCharacter(
-                            character,
-                            characterPage
-                        );
+                return res.json({
 
-                    characters.push(
-                        fullCharacter
-                    );
+                    success: true,
 
-                    console.log(
-                        `[Empire Companion] ✓ ${character.name}`
-                    );
+                    loggedIn: false,
 
-                } catch (error) {
+                    cached: true,
 
-                    console.error(
-                        `[Empire Companion] Failed to scrape ${character.name}:`,
-                        error.message
-                    );
+                    characters:
+                        cached.rows[0].characters,
 
-                    characters.push({
+                    updatedAt:
+                        cached.rows[0].updated_at,
 
-                        name:
-                            character.name,
-
-                        details: {},
-
-                        bondedItems: [],
-
-                        skills: [],
-
-                        ribbons: [],
-
-                        rituals: [],
-
-                        spells: [],
-
-                        background: "",
-
-                        sourceUrl:
-                            character.url,
-
-                        updatedAt:
-                            new Date().toISOString(),
-                    });
-                }
+                });
             }
 
-            await characterPage.close();
+            /*
+            ==================================================
+            NO PD SESSION AND NO CACHE
+            ==================================================
+            */
 
-            await saveSession();
+            return res.status(401).json({
 
-            res.json({
+                success: false,
 
-                success: true,
+                loggedIn: false,
 
-                loggedIn: true,
+                cached: false,
 
-                characters,
+                error:
+                    "Not logged into Profound Decisions and no character data has been cached yet.",
 
-                updatedAt:
-                    new Date().toISOString(),
             });
 
         } catch (error) {
@@ -1893,6 +2130,7 @@ app.get(
 
                 error:
                     error.message,
+
             });
         }
     }
@@ -1902,32 +2140,140 @@ app.get(
 PD LOGIN + IMPORT
 ==========================================================
 */
+app.post(
+    "/api/auth/session",
+    async (req, res) => {
 
+        try {
+
+            let userId = req.body?.userId;
+
+            if (!userId) {
+
+                const username =
+                    `user_${Date.now()}_${Math.random()
+                        .toString(36)
+                        .slice(2, 10)}`;
+
+                const result =
+                    await db.query(
+                        `
+                        INSERT INTO users (username)
+                        VALUES ($1)
+                        RETURNING id, username
+                        `,
+                        [username]
+                    );
+
+                userId =
+                    result.rows[0].id;
+
+            } else {
+
+                const result =
+                    await db.query(
+                        `
+                        SELECT id
+                        FROM users
+                        WHERE id = $1
+                        `,
+                        [userId]
+                    );
+
+                if (
+                    result.rows.length === 0
+                ) {
+
+                    return res.status(404).json({
+                        success: false,
+                        error: "User session not found."
+                    });
+
+                }
+
+            }
+
+            res.json({
+                success: true,
+                userId
+            });
+
+        } catch (error) {
+
+            console.error(
+                "[Empire Companion] User session error:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
+
+        }
+
+    }
+);
 app.post(
     "/api/pd/login",
     async (req, res) => {
 
         try {
 
-            /*
-            --------------------------------------------------
-            The current backend uses the existing Playwright
-            session rather than sending the PD password
-            through to Profound Decisions.
-            --------------------------------------------------
-            */
+            const userId =
+                req.body?.userId;
 
-            const loggedIn =
-                await checkPDLogin();
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    error: "userId is required."
+                });
+            }
+// Try cached characters first
+const cached =
+    await db.query(
+        `
+        SELECT characters, updated_at
+        FROM character_cache
+        WHERE user_id = $1
+        `,
+        [userId]
+    );
 
-            if (!loggedIn) {
+if (cached.rows.length > 0) {
+
+    console.log(
+        `[Empire Companion] Loading cached characters for user ${userId}.`
+    );
+
+    return res.json({
+
+        success: true,
+
+        loggedIn: true,
+
+        cached: true,
+
+        characters:
+            cached.rows[0].characters,
+
+        updatedAt:
+            cached.rows[0].updated_at,
+
+    });
+}
+
+const loggedIn =
+    await checkPDLogin(userId);
+
+if (!loggedIn) {
 
                 /*
                 Start the normal PD login process.
                 This opens the Playwright browser.
                 */
 
-                await startLogin();
+                await startLogin(userId);
 
                 return res.json({
 
@@ -1948,11 +2294,11 @@ app.post(
             --------------------------------------------------
             */
 
-            const characterLinks =
-                await getCharacterLinks();
+const characterLinks =
+    await getCharacterLinks(userId);
 
-            const ctx =
-                await getBrowserContext();
+const ctx =
+    await getBrowserContext(userId);
 
             const characterPage =
                 await ctx.newPage();
@@ -2018,7 +2364,7 @@ app.post(
 
             await characterPage.close();
 
-            await saveSession();
+          await saveSession(userId);
 
             res.json({
 
@@ -2064,16 +2410,59 @@ app.get(
 
         try {
 
-            const loggedIn =
-                await checkPDLogin();
+            const userId =
+                req.query?.userId;
 
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    error: "userId is required."
+                });
+            }
+
+            const loggedIn =
+                await checkPDLogin(userId);
+            // Try cached characters first
+            const cached =
+                await db.query(
+                    `
+                    SELECT characters, updated_at
+                    FROM character_cache
+                    WHERE user_id = $1
+                    `,
+                    [userId]
+                );
+
+            if (cached.rows.length > 0) {
+
+                console.log(
+                    `[Empire Companion] Loading cached characters for user ${userId}.`
+                );
+
+                return res.json({
+
+                    success: true,
+
+                    loggedIn: false,
+
+                    cached: true,
+
+                    characters:
+                        cached.rows[0].characters,
+
+                    updatedAt:
+                        cached.rows[0].updated_at,
+
+                });
+            }
             res.json({
 
                 success: true,
 
                 loggedIn,
 
-                loginInProgress,
+                loginInProgress:
+                    userLoginInProgress.has(userId),
             });
 
         } catch (error) {
@@ -2098,36 +2487,55 @@ app.get(
 ==========================================================
 START LOGIN
 ==========================================================
-*/
-
 app.get(
     "/api/auth/login",
     async (req, res) => {
 
-        if (loginInProgress) {
+        try {
 
-            return res.json({
+            const userId =
+                req.query?.userId;
 
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    error: "userId is required."
+                });
+            }
+
+            if (
+                userLoginInProgress.has(userId)
+            ) {
+                return res.json({
+                    success: true,
+                    message:
+                        "Login already in progress.",
+                });
+            }
+
+            await startLogin(userId);
+
+            res.json({
                 success: true,
-
                 message:
-                    "Login already in progress.",
+                    "PD login started.",
+            });
+
+        } catch (error) {
+
+            console.error(
+                "[Empire Companion] Login start failed:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                error:
+                    error.message
             });
         }
-
-        startLogin();
-
-        res.json({
-
-            success: true,
-
-            message:
-                "PD login browser opened.",
-        });
     }
 );
-
-
 /*
 ==========================================================
 LOGOUT
@@ -2187,10 +2595,20 @@ app.get(
     "/api/debug/character",
     async (req, res) => {
 
-        try {
+try {
 
-            const loggedIn =
-                await checkPDLogin();
+    const userId =
+        req.query?.userId;
+
+    if (!userId) {
+        return res.status(400).json({
+            success: false,
+            error: "userId is required."
+        });
+    }
+
+    const loggedIn =
+        await checkPDLogin(userId);
 
             if (!loggedIn) {
 
@@ -2202,9 +2620,8 @@ app.get(
                         "Not logged into Profound Decisions.",
                 });
             }
-
-            const characterLinks =
-                await getCharacterLinks();
+const characterLinks =
+    await getCharacterLinks(userId);
 
             if (
                 !characterLinks.length
@@ -2219,8 +2636,8 @@ app.get(
                 });
             }
 
-            const ctx =
-                await getBrowserContext();
+const ctx =
+    await getBrowserContext(userId);
 
             const debugPage =
                 await ctx.newPage();
@@ -2319,13 +2736,148 @@ app.get(
         }
     }
 );
+app.get(
+    "/api/debug/session",
+    async (req, res) => {
 
+        try {
+
+            const userId =
+                req.query?.userId;
+
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    error: "userId is required."
+                });
+            }
+
+            const result =
+                await db.query(
+                    `
+                    SELECT
+                        user_id,
+                        updated_at,
+                        LENGTH(storage_state) AS storage_length
+                    FROM pd_sessions
+                    WHERE user_id = $1
+                    `,
+                    [userId]
+                );
+
+            if (!result.rows.length) {
+
+                return res.json({
+                    success: true,
+                    sessionStored: false
+                });
+            }
+
+            res.json({
+                success: true,
+                sessionStored: true,
+                userId: result.rows[0].user_id,
+                updatedAt: result.rows[0].updated_at,
+                storageLength:
+                    result.rows[0].storage_length
+            });
+
+        } catch (error) {
+
+            console.error(
+                "[Empire Companion] Session debug failed:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
+        }
+    }
+);
 /*
 ==========================================================
 START SERVER
 ==========================================================
 */
+app.get(
+    "/api/debug/session-check",
+    async (req, res) => {
 
+        try {
+
+            const userId =
+                req.query?.userId;
+
+            if (!userId) {
+                return res.status(400).json({
+                    success: false,
+                    error: "userId is required."
+                });
+            }
+
+            // Force a fresh context so we are testing
+            // the session stored in PostgreSQL.
+            const oldContext =
+                userContexts.get(userId);
+
+            if (oldContext) {
+                try {
+                    await oldContext.close();
+                } catch {
+                    // Ignore close errors
+                }
+
+                userContexts.delete(userId);
+                userPages.delete(userId);
+            }
+
+            const ctx =
+                await getBrowserContext(userId);
+
+            const testPage =
+                await ctx.newPage();
+
+            await testPage.goto(
+                PD_CHARACTERS_URL,
+                {
+                    waitUntil:
+                        "domcontentloaded",
+                    timeout: 30000
+                }
+            );
+
+            await testPage.waitForTimeout(1000);
+
+            const url =
+                testPage.url();
+
+            const loggedIn =
+                !url.includes("/account/login");
+
+            await testPage.close();
+
+            res.json({
+                success: true,
+                loggedIn,
+                url
+            });
+
+        } catch (error) {
+
+            console.error(
+                "[Empire Companion] Session restore test failed:",
+                error
+            );
+
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
+        }
+    }
+);
 app.listen(
     PORT,
     "0.0.0.0",
