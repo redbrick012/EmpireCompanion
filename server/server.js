@@ -1,5 +1,6 @@
 import "dotenv/config";
-
+process.env.PLAYWRIGHT_BROWSERS_PATH =
+    "./playwright-browsers";
 import express from "express";
 import cors from "cors";
 import { chromium } from "playwright";

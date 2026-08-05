@@ -7,7 +7,7 @@
     "dev": "vite",
     "start": "node server/server.js",
     "build": "vite build",
-    "render-build": "npm install && npm run build && npx playwright install chromium",
+"render-build": "npm install && npm run build && PLAYWRIGHT_BROWSERS_PATH=./playwright-browsers npx playwright install chromium",
     "lint": "oxlint",
     "preview": "vite preview"
   },
