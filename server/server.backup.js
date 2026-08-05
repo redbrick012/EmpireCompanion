@@ -420,7 +420,7 @@ LOGIN
 ==========================================================
 */
 
-async function startLogin(userId, username, password) {
+async function startLogin(userId) {
 
     if (!userId) {
         throw new Error(
@@ -428,16 +428,8 @@ async function startLogin(userId, username, password) {
         );
     }
 
-    if (!username || !password) {
-        throw new Error(
-            "PD username and password are required."
-        );
-    }
-
     if (userLoginInProgress.has(userId)) {
-        throw new Error(
-            "A PD login is already in progress."
-        );
+        return;
     }
 
     userLoginInProgress.add(userId);
@@ -448,7 +440,7 @@ async function startLogin(userId, username, password) {
             await getPage(userId);
 
         console.log(
-            `[Empire Companion] Starting programmatic PD login for user ${userId}...`
+            `[Empire Companion] Opening PD login for user ${userId}...`
         );
 
         await currentPage.goto(
@@ -461,78 +453,40 @@ async function startLogin(userId, username, password) {
             }
         );
 
-        await currentPage.waitForTimeout(500);
-
         console.log(
-            `[Empire Companion] PD login page loaded for user ${userId}.`
+            `[Empire Companion] PD login required for user ${userId}.`
         );
 
-        await currentPage
-            .locator('input[name="login"]')
-            .fill(username);
+        /*
+        --------------------------------------------------
+        IMPORTANT
 
-        await currentPage
-            .locator('input[name="password"]')
-            .fill(password);
+        On Render this browser is headless, so the user
+        cannot see this window.
 
-        console.log(
-            `[Empire Companion] Submitting PD login for user ${userId}...`
+        The mobile login flow therefore cannot depend on
+        a visible Playwright browser.
+        --------------------------------------------------
+        */
+
+        await currentPage.waitForURL(
+            url =>
+                !url
+                    .toString()
+                    .includes(
+                        "/account/login"
+                    ),
+            {
+                timeout:
+                    5 * 60 * 1000,
+            }
         );
 
-        await Promise.all([
-            currentPage.waitForLoadState(
-                "domcontentloaded"
-            ).catch(() => {}),
-
-            currentPage
-                .locator(
-                    'form.loginForm input[type="submit"]'
-                )
-                .click(),
-        ]);
-
-        await currentPage.waitForTimeout(1500);
-
-        const currentUrl =
-            currentPage.url();
-
         console.log(
-            `[Empire Companion] PD login result URL for user ${userId}:`,
-            currentUrl
-        );
-
-        if (
-            currentUrl.includes(
-                "/account/login"
-            )
-        ) {
-
-            const errorText =
-                await currentPage
-                    .locator("body")
-                    .innerText()
-                    .catch(() => "");
-
-            console.error(
-                `[Empire Companion] PD login failed for user ${userId}.`
-            );
-
-            console.error(
-                errorText.slice(0, 1000)
-            );
-
-            throw new Error(
-                "Profound Decisions login failed. Please check your username and password."
-            );
-        }
-
-        console.log(
-            `[Empire Companion] PD login successful for user ${userId}.`
+            `[Empire Companion] PD login detected for user ${userId}.`
         );
 
         await saveSession(userId);
-
-        return true;
 
     } catch (error) {
 
@@ -540,8 +494,6 @@ async function startLogin(userId, username, password) {
             `[Empire Companion] Login failed for user ${userId}:`,
             error.message
         );
-
-        throw error;
 
     } finally {
 
@@ -2271,127 +2223,82 @@ app.post(
             const userId =
                 req.body?.userId;
 
-            const username =
-                req.body?.username;
-
-            const password =
-                req.body?.password;
-
             if (!userId) {
                 return res.status(400).json({
                     success: false,
                     error: "userId is required."
                 });
             }
+// Try cached characters first
+const cached =
+    await db.query(
+        `
+        SELECT characters, updated_at
+        FROM character_cache
+        WHERE user_id = $1
+        `,
+        [userId]
+    );
 
-            if (!username || !password) {
-                return res.status(400).json({
-                    success: false,
-                    error:
-                        "PD username and password are required."
-                });
-            }
+if (cached.rows.length > 0) {
 
-            console.log(
-                `[Empire Companion] Mobile PD login requested for user ${userId}.`
-            );
+    console.log(
+        `[Empire Companion] Loading cached characters for user ${userId}.`
+    );
 
-            /*
-            ==================================================
-            CHECK EXISTING SESSION
-            ==================================================
-            */
+    return res.json({
 
-            const alreadyLoggedIn =
-                await checkPDLogin(userId);
+        success: true,
 
-            if (alreadyLoggedIn) {
+        loggedIn: true,
 
-                console.log(
-                    `[Empire Companion] User ${userId} already has a valid PD session.`
-                );
+        cached: true,
 
-                return res.json({
+        characters:
+            cached.rows[0].characters,
 
-                    success: true,
+        updatedAt:
+            cached.rows[0].updated_at,
 
-                    loggedIn: true,
+    });
+}
 
-                    alreadyLoggedIn: true,
+const loggedIn =
+    await checkPDLogin(userId);
 
-                });
-            }
+if (!loggedIn) {
 
-            /*
-            ==================================================
-            LOGIN WITH SUPPLIED CREDENTIALS
-            ==================================================
-            */
+                /*
+                Start the normal PD login process.
+                This opens the Playwright browser.
+                */
 
-            await startLogin(
-                userId,
-                username,
-                password
-            );
-
-            /*
-            ==================================================
-            VERIFY LOGIN
-            ==================================================
-            */
-
-            const loggedIn =
-                await checkPDLogin(userId);
-
-            if (!loggedIn) {
-
-                return res.status(401).json({
-
-                    success: false,
-
-                    loggedIn: false,
-
-                    error:
-                        "Profound Decisions rejected the login. Please check your username and password."
-
-                });
-            }
-
-            console.log(
-                `[Empire Companion] User ${userId} successfully authenticated with PD.`
-            );
-
-            /*
-            ==================================================
-            IMPORT CHARACTERS
-            ==================================================
-            */
-
-            const characterLinks =
-                await getCharacterLinks(userId);
-
-            console.log(
-                `[Empire Companion] Found ${characterLinks.length} characters for user ${userId}.`
-            );
-
-            if (!characterLinks.length) {
+                await startLogin(userId);
 
                 return res.json({
 
-                    success: true,
+                    success: false,
 
-                    loggedIn: true,
+                    loginRequired: true,
 
-                    characters: [],
-
-                    updatedAt:
-                        new Date().toISOString(),
+                    error:
+                        "Please log into Profound Decisions in the browser window that opened.",
 
                 });
             }
 
-            const ctx =
-                await getBrowserContext(userId);
+            /*
+            --------------------------------------------------
+            Already logged in.
+            Import the characters.
+            --------------------------------------------------
+            */
+
+const characterLinks =
+    await getCharacterLinks(userId);
+
+const ctx =
+    await getBrowserContext(userId);
 
             const characterPage =
                 await ctx.newPage();
@@ -2457,20 +2364,7 @@ app.post(
 
             await characterPage.close();
 
-            /*
-            ==================================================
-            SAVE SESSION + CHARACTER CACHE
-            ==================================================
-            */
-
-            await saveSession(
-                userId
-            );
-
-            await saveCharacterCache(
-                userId,
-                characters
-            );
+          await saveSession(userId);
 
             res.json({
 
@@ -2488,15 +2382,13 @@ app.post(
         } catch (error) {
 
             console.error(
-                "[Empire Companion] PD mobile login/import failed:",
+                "[Empire Companion] PD login/import failed:",
                 error
             );
 
             res.status(500).json({
 
                 success: false,
-
-                loggedIn: false,
 
                 error:
                     error.message,
