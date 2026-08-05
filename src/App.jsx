@@ -806,7 +806,8 @@ export default function App() {
     const [userId, setUserId] = useState(
         () => localStorage.getItem(USER_ID_KEY)
     );
-
+    const [pdUsername, setPdUsername] = useState("");
+    const [pdPassword, setPdPassword] = useState("");
     const characters =
         data.characters || [];
 
@@ -887,23 +888,27 @@ export default function App() {
         try {
 
             if (!userId) {
-
                 throw new Error(
                     "No user session is available yet."
                 );
+            }
 
+            if (!pdUsername || !pdPassword) {
+                throw new Error(
+                    "Please enter your Profound Decisions username and password."
+                );
             }
 
             setLoading(true);
             setError(null);
 
             console.log(
-                "[Empire Companion] Starting PD login..."
+                "[Empire Companion] Starting mobile PD login..."
             );
 
             const response =
                 await fetch(
-                    `${API_URL}/api/auth/session`,
+                    `${API_URL}/api/pd/login`,
                     {
                         method: "POST",
 
@@ -918,6 +923,12 @@ export default function App() {
                         body: JSON.stringify({
                             userId:
                                 Number(userId),
+
+                            username:
+                                pdUsername,
+
+                            password:
+                                pdPassword,
                         }),
                     }
                 );
@@ -926,118 +937,36 @@ export default function App() {
                 await response.json();
 
             console.log(
-                "[Empire Companion] PD login response:",
+                "[Empire Companion] Mobile PD login response:",
                 result
             );
 
+            if (!response.ok || !result.success) {
+
+                throw new Error(
+                    result.error ||
+                    "Profound Decisions login failed."
+                );
+            }
+
             /*
             ==============================================
-            LOGIN REQUIRED
+            LOGIN + IMPORT SUCCESSFUL
             ==============================================
             */
-
-            if (result.loginRequired) {
-
-                setError(
-                    "Profound Decisions login window opened. Please log in..."
-                );
-
-                console.log(
-                    "[Empire Companion] Waiting for PD login..."
-                );
-
-                let loggedIn = false;
-
-                for (
-                    let attempt = 0;
-                    attempt < 60;
-                    attempt++
-                ) {
-
-                    await new Promise(
-                        resolve =>
-                            setTimeout(
-                                resolve,
-                                2000
-                            )
-                    );
-
-                    try {
-
-const statusResponse =
-                await fetch(
-                    `${API_URL}/api/auth/status?userId=${Number(userId)}`
-                );
-
-            const status =
-                await statusResponse.json();
 
             console.log(
-                "[Empire Companion] PD login status:",
-                status
+                "[Empire Companion] PD login successful. Loading characters..."
             );
 
-            if (status.loggedIn) {
-
-                loggedIn = true;
-
-                console.log(
-                    "[Empire Companion] PD login detected. Importing characters..."
-                );
-
-                break;
-            }
-            
-
-
-                    } catch (statusError) {
-
-                        console.error(
-                            "[Empire Companion] Login status check failed:",
-                            statusError
-                        );
-
-                    }
-                }
-
-                if (!loggedIn) {
-
-                    throw new Error(
-                        "Timed out waiting for Profound Decisions login."
-                    );
-
-                }
-
-                setError(null);
-
-                /*
-                ==========================================
-                LOGIN COMPLETE — IMPORT CHARACTERS
-                ==========================================
-                */
-
-                await loadFromBackend();
-
-                return;
-            }
+            await loadFromBackend();
 
             /*
-            ==============================================
-            ALREADY LOGGED IN
-            ==============================================
+            Clear the password from the UI after
+            successful authentication.
             */
 
-            if (result.success) {
-
-                await loadFromBackend();
-
-                return;
-            }
-
-            throw new Error(
-                result.error ||
-                "Profound Decisions login failed."
-            );
+            setPdPassword("");
 
         } catch (err) {
 
@@ -1048,13 +977,12 @@ const statusResponse =
 
             setError(
                 err?.message ||
-                "Could not start Profound Decisions login."
+                "Could not log into Profound Decisions."
             );
 
         } finally {
 
             setLoading(false);
-
         }
     }
     /*
@@ -1404,7 +1332,52 @@ const statusResponse =
                 </div>
 
             )}
+            {characters.length === 0 && (
+                <div className="pd-login-panel">
 
+                    <h2>Log in to Profound Decisions</h2>
+
+                    <p>
+                        Enter your Profound Decisions account details
+                        to import your Empire characters.
+                    </p>
+
+                    <input
+                        type="text"
+                        placeholder="Profound Decisions username"
+                        value={pdUsername}
+                        onChange={(event) =>
+                            setPdUsername(event.target.value)
+                        }
+                        autoComplete="username"
+                    />
+
+                    <input
+                        type="password"
+                        placeholder="Profound Decisions password"
+                        value={pdPassword}
+                        onChange={(event) =>
+                            setPdPassword(event.target.value)
+                        }
+                        autoComplete="current-password"
+                    />
+
+                    <button
+                        className="primary-button"
+                        onClick={handlePDSync}
+                        disabled={
+                            loading ||
+                            !pdUsername ||
+                            !pdPassword
+                        }
+                    >
+                        {loading
+                            ? "Logging in..."
+                            : "Log in & Import Characters"}
+                    </button>
+
+                </div>
+            )}
             <div className="character-navigation">
 
     <div className="mobile-character-bar">
