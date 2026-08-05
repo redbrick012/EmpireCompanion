@@ -1332,4 +1332,8 @@ a {
 .pd-login-panel .primary-button {
     width: 100%;
 }
+/* Hide character tiles/list */
+.character-list {
+    display: none !important;
+}
 }
