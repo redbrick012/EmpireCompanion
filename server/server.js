@@ -1723,6 +1723,9 @@ async function scrapeCharacter(
     await characterPage.waitForTimeout(
         1000
     );
+await fs.promises.mkdir(SESSION_DIR, {
+    recursive: true,
+});
 const debugHtml =
     await characterPage.content();
 
