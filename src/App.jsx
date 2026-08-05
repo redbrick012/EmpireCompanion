@@ -5,7 +5,7 @@ import {
 } from "react";
 import "./App.css";
 
-const API_URL = "http://localhost:3001";
+const API_URL = "https://empirecompanion.onrender.com";
 const USER_ID_KEY = "empire_companion_user_id";
 const SESSION_KEY = "empire_companion_session_id";
 
