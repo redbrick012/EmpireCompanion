@@ -35,86 +35,87 @@ parse(fileText) {
 
     parseDetails(doc, character) {
 
-        // Get every table row on the page
-        const rows = [...doc.querySelectorAll("tr")];
+    // Character name
+    const title = doc.querySelector("h2");
 
-        rows.forEach(row => {
+    if (title) {
+        character.details.name = this.clean(title.textContent);
+    }
 
-            const cells = row.querySelectorAll("td");
+    // Character details table
+    const table = doc.querySelector("table.viewerTable.Left");
 
-            if (cells.length < 2) return;
+    if (!table) {
+        alert("viewerTable not found");
+        return;
+    }
 
-            const label = this.clean(cells[0].textContent);
-            const value = this.clean(cells[1].textContent);
+    table.querySelectorAll("tr").forEach(row => {
 
-            switch(label){
+        const cells = row.querySelectorAll("td");
 
-                case "CID":
-                    character.details.cid = value;
-                    break;
+        if (cells.length !== 2) return;
 
-                case "Nation":
-                    character.details.nation = value;
-                    break;
+        const label = this.clean(cells[0].textContent);
+        const value = this.clean(cells[1].textContent);
 
-                case "Lineage":
-                    character.details.lineage = value;
-                    break;
+        switch (label) {
 
-                case "Archetype":
-                    character.details.archetype = value;
-                    break;
+            case "CID":
+                character.details.cid = value;
+                break;
 
-                case "Virtue":
-                    character.details.virtue = value;
-                    break;
+            case "Nation":
+                character.details.nation = value;
+                break;
 
-                case "Banner":
-                    character.details.banner = value;
-                    break;
+            case "Lineage":
+                character.details.lineage = value;
+                break;
 
-                case "Coven":
-                    character.details.coven = value;
-                    break;
+            case "Archetype":
+                character.details.archetype = value;
+                break;
 
-                case "Sect":
-                    character.details.sect = value;
-                    break;
+            case "Virtue":
+                character.details.virtue = value;
+                break;
 
-                case "Territory":
-                    character.details.territory = value;
-                    break;
+            case "Banner":
+                character.details.banner = value;
+                break;
 
-                case "Resource":
-                    character.details.resource = value;
-                    break;
+            case "Coven":
+                character.details.coven = value;
+                break;
 
-                case "Level":
-                    character.details.level = value;
-                    break;
+            case "Sect":
+                character.details.sect = value;
+                break;
 
-                case "Status":
-                    character.details.status = value;
-                    break;
+            case "Territory":
+                character.details.territory = value;
+                break;
 
-                case "Points Spent":
-                    character.details.pointsSpent = value;
-                    break;
+            case "Resource":
+                character.details.resource = value;
+                break;
 
-            }
+            case "Level":
+                character.details.level = value;
+                break;
 
-        });
+            case "Status":
+                character.details.status = value;
+                break;
 
-        // Character name
-        const h1 = doc.querySelector("h1");
-
-        if(h1){
-
-            character.details.name = this.clean(h1.textContent);
+            case "Points Spent":
+                character.details.pointsSpent = value;
+                break;
 
         }
 
-    },
+    });
 
     clean(text){
 
