@@ -5,44 +5,33 @@ Parser V2
 ==========================================
 */
 
-const Parser = {
+parse(fileText) {
 
-    parse(fileText) {
+    let html = fileText;
 
-        let html = fileText;
+    // Extract HTML from MHT
+    const start = fileText.indexOf("<!DOCTYPE html");
 
-        // Handle .mht/.mhtml
-        if (fileText.includes("Content-Type: text/html")) {
+    if (start > -1) {
+        html = fileText.substring(start);
+    }
 
-            const start = fileText.indexOf("<!DOCTYPE html");
+    console.log(html.substring(0,200));
 
-            if (start > -1) {
-                html = fileText.substring(start);
-            }
+    const doc = new DOMParser().parseFromString(html, "text/html");
 
-        }
+    const character = CharacterModel.create();
 
-        const doc = new DOMParser().parseFromString(html, "text/html");
+    character.imported = new Date().toISOString();
 
-        const character = CharacterModel.create();
+    // Debug
+    alert("Page title: " + doc.title);
 
-        character.imported = new Date().toISOString();
+    this.parseDetails(doc, character);
 
-        this.parseDetails(doc, character);
+    return character;
 
-        // These are empty for now
-        character.skills = [];
-        character.spells = [];
-        character.rituals = [];
-        character.ribbons = [];
-        character.bondedItems = [];
-        character.background = "";
-
-        console.log(character);
-
-        return character;
-
-    },
+}
 
     parseDetails(doc, character) {
 
