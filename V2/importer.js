@@ -1,36 +1,29 @@
 const Importer = {
 
-    async importFile(file) {
+    async importFile(file){
 
-        alert("1. File selected: " + file.name);
-
-        try {
+        try{
 
             const text = await file.text();
 
-            alert("2. File read (" + text.length + " characters)");
+            const character = Parser.parse(text);
 
-            const data = Parser.parse(text);
+            Storage.saveCharacter(character);
 
-            alert("3. Parser finished");
-
-            console.log(data);
-
-            App.characterImported(data);
-
-            alert("4. Character imported");
-
-        }
-        catch (e) {
-
-            console.error(e);
+            App.characterImported(character);
 
             alert(
-                "ERROR:\n\n" +
-                e.message +
-                "\n\n" +
-                e.stack
+                "Imported " +
+                character.details.name
             );
+
+        }
+
+        catch(error){
+
+            console.error(error);
+
+            alert(error.message);
 
         }
 
