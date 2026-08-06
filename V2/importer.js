@@ -2,11 +2,23 @@ const Importer = {
 
     async importFile(file) {
 
-        const text = await file.text();
+        try {
 
-        const character = Parser.parse(text);
+            const text = await file.text();
 
-        alert(JSON.stringify(character.details, null, 2));
+            const character = Parser.parse(text);
+
+            alert(JSON.stringify(character.details, null, 2));
+
+            console.log(character);
+
+        } catch (e) {
+
+            console.error(e);
+
+            alert(e.message);
+
+        }
 
     }
 
