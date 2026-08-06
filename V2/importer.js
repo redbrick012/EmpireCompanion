@@ -2,7 +2,11 @@ const Importer = {
 
     async importFile(file) {
 
-        alert("VERSION 2 IMPORTER");
+        const text = await file.text();
+
+        const character = Parser.parse(text);
+
+        alert(JSON.stringify(character.details, null, 2));
 
     }
 
