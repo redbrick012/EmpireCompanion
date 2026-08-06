@@ -320,3 +320,35 @@ header h2{
     display:none!important;
 
 }
+
+.detail-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.detail-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.detail-row span{
+
+    color:var(--muted);
+
+}
+
+.detail-row strong{
+
+    text-align:right;
+
+}
