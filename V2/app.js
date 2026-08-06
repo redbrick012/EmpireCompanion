@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const fileInput = document.getElementById("characterFile");
 
     importButton.addEventListener("click", () => {
-        alert("Opening file picker");
+        alert("Opening picker");
         fileInput.click();
     });
 
@@ -15,4 +15,3 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
-    
