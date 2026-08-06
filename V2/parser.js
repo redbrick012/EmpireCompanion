@@ -24,9 +24,21 @@ const Parser = {
 
         character.imported = new Date().toISOString();
 
-        this.parseDetails(doc, character);
+ this.parseDetails(doc, character);
 
-        return character;
+character.spells = this.parseBlocks(
+    doc.querySelector(".spellList")
+);
+
+character.rituals = this.parseBlocks(
+    doc.querySelector(".ritualList")
+);
+
+character.skills = this.parseBlocks(
+    doc.querySelector(".skillList")
+);
+
+return character;
 
     },
 
