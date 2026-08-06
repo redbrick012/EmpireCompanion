@@ -40,21 +40,23 @@ const App = {
 
     loadCharacter() {
 
-        const saved = Storage.getCharacter();
+    const saved = Storage.getCharacter();
 
-        if (!saved) {
+    console.log(saved);
 
-            this.showWelcome();
+    if (!saved || !saved.details) {
 
-            return;
+        this.showWelcome();
 
-        }
+        return;
 
-        this.character = saved;
+    }
 
-        this.showHome();
+    this.character = saved;
 
-    },
+    this.showHome();
+
+}
 
     characterImported(character) {
 
