@@ -1,27 +1,20 @@
 const Importer = {
 
-    async importFile(file){
+    async importFile(file) {
 
-        try{
+        try {
 
             const text = await file.text();
 
-            const character = Parser.parse(text);
-
-            Storage.saveCharacter(character);
-
-            App.characterImported(character);
+            console.log(text);
 
             alert(
-                "Imported " +
-                character.details.name
+                "File loaded.\n\n" +
+                text.substring(0,500)
             );
 
         }
-
         catch(error){
-
-            console.error(error);
 
             alert(error.message);
 
