@@ -84,51 +84,44 @@ const App = {
 
     },
 
-    refresh(){
+ refresh() {
 
-    if(!this.character) return;
+    if (!this.character) return;
+
+    if (!this.character.details) {
+        alert("Character has no details!");
+        return;
+    }
 
     const d = this.character.details;
 
-    document.getElementById("characterName").textContent =
-        d.name;
+    const set = (id, value) => {
+        const el = document.getElementById(id);
 
-    document.getElementById("characterSummary").textContent =
-        `${d.nation} • ${d.lineage}`;
+        if (!el) {
+            console.error("Missing element:", id);
+            return;
+        }
 
-    document.getElementById("charName").textContent =
-        d.name;
+        el.textContent = value || "";
+    };
 
-    document.getElementById("charNation").textContent =
-        `${d.nation} • ${d.lineage}`;
+    set("characterName", d.name);
+    set("characterSummary", `${d.nation || ""} • ${d.lineage || ""}`);
 
-    document.getElementById("cid").textContent =
-        d.cid;
+    set("charName", d.name);
+    set("charNation", `${d.nation || ""} • ${d.lineage || ""}`);
 
-    document.getElementById("nation").textContent =
-        d.nation;
+    set("cid", d.cid);
+    set("nation", d.nation);
+    set("lineage", d.lineage);
+    set("archetype", d.archetype);
+    set("banner", d.banner);
+    set("territory", d.territory);
+    set("resource", d.resource);
+    set("status", d.status);
 
-    document.getElementById("lineage").textContent =
-        d.lineage;
-
-    document.getElementById("archetype").textContent =
-        d.archetype;
-
-    document.getElementById("banner").textContent =
-        d.banner;
-
-    document.getElementById("territory").textContent =
-        d.territory;
-
-    document.getElementById("resource").textContent =
-        d.resource;
-
-    document.getElementById("status").textContent =
-        d.status;
-
-    }
-
-};
+ }
 
 document.addEventListener("DOMContentLoaded", () => {
 
