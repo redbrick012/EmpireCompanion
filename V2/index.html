@@ -1,1 +1,149 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Empire Companion</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div id="app">
+
+    <!-- Splash Screen -->
+
+    <section id="welcomePage" class="page active">
+
+        <div class="hero">
+
+            <div class="hero-icon">🌿</div>
+
+            <h1>Empire Companion</h1>
+
+            <p>
+                Your offline companion for
+                Profound Decisions' Empire.
+            </p>
+
+        </div>
+
+        <button id="importButton" class="primary-button">
+
+            📂 Import Character
+
+        </button>
+
+        <p class="small-text">
+
+            Import a saved Profound Decisions
+            character page (.mht, .mhtml or .html)
+
+        </p>
+
+    </section>
+
+
+
+    <!-- Hidden File Picker -->
+
+    <input
+        type="file"
+        id="characterFile"
+        accept=".mht,.mhtml,.html,.htm"
+        hidden
+    >
+
+
+
+    <!-- Home -->
+
+    <section id="homePage" class="page">
+
+        <header>
+
+            <div>
+
+                <small>Empire Companion</small>
+
+                <h2 id="characterName">
+                    No Character Loaded
+                </h2>
+
+            </div>
+
+        </header>
+
+
+
+        <div class="card">
+
+            <h3>Character</h3>
+
+            <p id="characterSummary">
+
+                Import a character to begin.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="menu">
+
+            <button class="menu-button">
+
+                👤 Character
+
+            </button>
+
+            <button class="menu-button">
+
+                ⚔ Combat
+
+            </button>
+
+            <button class="menu-button">
+
+                ✨ Magic
+
+            </button>
+
+            <button class="menu-button">
+
+                📜 Rituals
+
+            </button>
+
+            <button class="menu-button">
+
+                🎒 Inventory
+
+            </button>
+
+            <button class="menu-button">
+
+                ⚙ Settings
+
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="storage.js"></script>
+<script src="parser.js"></script>
+<script src="importer.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
