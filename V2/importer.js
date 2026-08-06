@@ -1,22 +1,14 @@
 const Importer = {
 
-    async importFile(file) {
+    async importFile(file){
 
         const text = await file.text();
 
-        const start = text.indexOf("<!DOCTYPE html");
+        const character = Parser.parse(text);
 
-        alert("DOCTYPE starts at: " + start);
+        console.log(character);
 
-        if (start > -1) {
-
-            alert(text.substring(start, start + 500));
-
-        } else {
-
-            alert("DOCTYPE not found");
-
-        }
+        alert(JSON.stringify(character.details, null, 2));
 
     }
 
