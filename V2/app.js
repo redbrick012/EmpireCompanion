@@ -19,24 +19,38 @@ const App = {
 
     bindEvents() {
 
-        const importButton = document.getElementById("importButton");
-        const fileInput = document.getElementById("characterFile");
+    const importButton = document.getElementById("importButton");
+    const fileInput = document.getElementById("characterFile");
 
-        importButton.addEventListener("click", () => {
+    if (!importButton) {
+        alert("Import button not found!");
+        return;
+    }
 
-            fileInput.click();
+    if (!fileInput) {
+        alert("File input not found!");
+        return;
+    }
 
-        });
+    importButton.addEventListener("click", () => {
 
-        fileInput.addEventListener("change", async (event) => {
+        alert("Button clicked");
 
-            if (!event.target.files.length) return;
+        fileInput.click();
 
-            await Importer.importFile(event.target.files[0]);
+    });
 
-        });
+    fileInput.addEventListener("change", async (event) => {
 
-    },
+        alert("File chosen");
+
+        if (!event.target.files.length) return;
+
+        await Importer.importFile(event.target.files[0]);
+
+    });
+
+}
 
     loadCharacter() {
 
