@@ -82,20 +82,47 @@ const App = {
 
     },
 
-    refresh() {
+    refresh(){
 
-        if (!this.character) return;
+    if(!this.character) return;
 
-        document.getElementById("characterName").textContent =
-            this.character.details.name || "Unknown Character";
+    const d = this.character.details;
 
-        document.getElementById("characterSummary").textContent =
-            [
-                this.character.details.nation,
-                this.character.details.lineage
-            ]
-            .filter(Boolean)
-            .join(" • ");
+    document.getElementById("characterName").textContent =
+        d.name;
+
+    document.getElementById("characterSummary").textContent =
+        `${d.nation} • ${d.lineage}`;
+
+    document.getElementById("charName").textContent =
+        d.name;
+
+    document.getElementById("charNation").textContent =
+        `${d.nation} • ${d.lineage}`;
+
+    document.getElementById("cid").textContent =
+        d.cid;
+
+    document.getElementById("nation").textContent =
+        d.nation;
+
+    document.getElementById("lineage").textContent =
+        d.lineage;
+
+    document.getElementById("archetype").textContent =
+        d.archetype;
+
+    document.getElementById("banner").textContent =
+        d.banner;
+
+    document.getElementById("territory").textContent =
+        d.territory;
+
+    document.getElementById("resource").textContent =
+        d.resource;
+
+    document.getElementById("status").textContent =
+        d.status;
 
     }
 
