@@ -2,21 +2,19 @@ const Importer = {
 
     async importFile(file) {
 
-        try {
+        const text = await file.text();
 
-            const text = await file.text();
+        const start = text.indexOf("<!DOCTYPE html");
 
-            console.log(text);
+        alert("DOCTYPE starts at: " + start);
 
-            alert(
-                "File loaded.\n\n" +
-                text.substring(0,500)
-            );
+        if (start > -1) {
 
-        }
-        catch(error){
+            alert(text.substring(start, start + 500));
 
-            alert(error.message);
+        } else {
+
+            alert("DOCTYPE not found");
 
         }
 
