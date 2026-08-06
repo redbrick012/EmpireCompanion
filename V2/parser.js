@@ -1,9 +1,7 @@
-
 /*
 ==========================================
-Empire Companion V2
-Profound Decisions Parser
-Version 1
+Empire Companion
+Parser V2
 ==========================================
 */
 
@@ -11,13 +9,12 @@ const Parser = {
 
     parse(fileText) {
 
-        // Handle .mht files by extracting the HTML part
         let html = fileText;
 
+        // Handle .mht/.mhtml
         if (fileText.includes("Content-Type: text/html")) {
 
-            const start =
-                fileText.indexOf("<!DOCTYPE html");
+            const start = fileText.indexOf("<!DOCTYPE html");
 
             if (start > -1) {
                 html = fileText.substring(start);
@@ -25,297 +22,118 @@ const Parser = {
 
         }
 
-        const doc =
-            new DOMParser()
-                .parseFromString(
-                    html,
-                    "text/html"
-                );
+        const doc = new DOMParser().parseFromString(html, "text/html");
 
-        return {
+        const character = CharacterModel.create();
 
-            meta: {
-                imported: new Date().toISOString(),
-                source: "Profound Decisions"
-            },
+        character.imported = new Date().toISOString();
 
-            character: this.parseCharacter(doc),
+        this.parseDetails(doc, character);
 
-            skills: this.parseSkills(doc),
+        // These are empty for now
+        character.skills = [];
+        character.spells = [];
+        character.rituals = [];
+        character.ribbons = [];
+        character.bondedItems = [];
+        character.background = "";
 
-            rituals: this.parseRituals(doc),
+        console.log(character);
 
-            spells: this.parseSpells(doc),
-
-            ribbons: this.parseRibbons(doc),
-
-            bondedItems: this.parseBondedItems(doc),
-
-            background: this.parseBackground(doc)
-
-        };
+        return character;
 
     },
 
-    /* --------------------------
-       CHARACTER DETAILS
-    -------------------------- */
+    parseDetails(doc, character) {
 
-    parseCharacter(doc) {
+        // Get every table row on the page
+        const rows = [...doc.querySelectorAll("tr")];
 
-        const result = {};
+        rows.forEach(row => {
 
-        result.name =
-            this.text(
-                doc.querySelector(
-                    "#DisplayActiveCharacter h1"
-                )
-            );
+            const cells = row.querySelectorAll("td");
 
-        const table =
-            doc.querySelector(
-                "#DisplayActiveCharacter table.viewerTable"
-            );
+            if (cells.length < 2) return;
 
-        if (!table)
-            return result;
+            const label = this.clean(cells[0].textContent);
+            const value = this.clean(cells[1].textContent);
 
-        table
-            .querySelectorAll("tr")
-            .forEach(row => {
+            switch(label){
 
-                const cells =
-                    row.querySelectorAll("td");
+                case "CID":
+                    character.details.cid = value;
+                    break;
 
-                if (cells.length < 2)
-                    return;
+                case "Nation":
+                    character.details.nation = value;
+                    break;
 
-                const key =
-                    this.text(cells[0]);
+                case "Lineage":
+                    character.details.lineage = value;
+                    break;
 
-                const value =
-                    this.text(cells[1]);
+                case "Archetype":
+                    character.details.archetype = value;
+                    break;
 
-                if (key)
-                    result[key] = value;
+                case "Virtue":
+                    character.details.virtue = value;
+                    break;
 
-            });
+                case "Banner":
+                    character.details.banner = value;
+                    break;
 
-        return result;
+                case "Coven":
+                    character.details.coven = value;
+                    break;
 
-    },
+                case "Sect":
+                    character.details.sect = value;
+                    break;
 
-    /* --------------------------
-       SKILLS
-    -------------------------- */
+                case "Territory":
+                    character.details.territory = value;
+                    break;
 
-    parseSkills(doc) {
+                case "Resource":
+                    character.details.resource = value;
+                    break;
 
-        return this.parseBlocks(
-            doc,
-            "wikiSkillDetails"
-        );
+                case "Level":
+                    character.details.level = value;
+                    break;
 
-    },
+                case "Status":
+                    character.details.status = value;
+                    break;
 
-    /* --------------------------
-       SPELLS
-    -------------------------- */
-
-    parseSpells(doc) {
-
-        return this.parseSection(
-            doc,
-            "Spells"
-        );
-
-    },
-
-    /* --------------------------
-       RITUALS
-    -------------------------- */
-
-    parseRituals(doc) {
-
-        return this.parseSection(
-            doc,
-            "Rituals"
-        );
-
-    },
-
-    /* --------------------------
-       RIBBONS
-    -------------------------- */
-
-    parseRibbons(doc) {
-
-        const output = [];
-
-        doc
-            .querySelectorAll("table")
-            .forEach(table => {
-
-                const header =
-                    table.textContent;
-
-                if (!header.includes("Ribbon"))
-                    return;
-
-                table
-                    .querySelectorAll("tbody tr")
-                    .forEach(row => {
-
-                        const cells =
-                            [...row.querySelectorAll("td")]
-                                .map(td =>
-                                    this.text(td)
-                                );
-
-                        if (cells.length) {
-
-                            output.push(cells);
-
-                        }
-
-                    });
-
-            });
-
-        return output;
-
-    },
-
-    /* --------------------------
-       BONDED ITEMS
-    -------------------------- */
-
-    parseBondedItems(doc) {
-
-        return this.parseSection(
-            doc,
-            "Bonded Items"
-        );
-
-    },
-
-    /* --------------------------
-       BACKGROUND
-    -------------------------- */
-
-    parseBackground(doc) {
-
-        const panels =
-            [...doc.querySelectorAll(".TabPanel")];
-
-        for (const panel of panels) {
-
-            if (
-                panel.textContent.includes(
-                    "Background"
-                )
-            ) {
-
-                return panel.innerText.trim();
+                case "Points Spent":
+                    character.details.pointsSpent = value;
+                    break;
 
             }
 
-        }
+        });
 
-        return "";
+        // Character name
+        const h1 = doc.querySelector("h1");
 
-    },
+        if(h1){
 
-    /* --------------------------
-       Generic parser
-    -------------------------- */
-
-    parseSection(doc, title) {
-
-        const result = [];
-
-        const panels =
-            [...doc.querySelectorAll(".TabPanel")];
-
-        for (const panel of panels) {
-
-            if (
-                !panel.innerText.includes(title)
-            ) {
-                continue;
-            }
-
-            panel
-                .querySelectorAll(".skillBlock")
-                .forEach(block => {
-
-                    result.push({
-
-                        title:
-                            this.text(
-                                block.querySelector(
-                                    ".skillHeader"
-                                )
-                            ),
-
-                        description:
-                            this.text(
-                                block.querySelector(
-                                    ".skillText"
-                                )
-                            )
-
-                    });
-
-                });
+            character.details.name = this.clean(h1.textContent);
 
         }
 
-        return result;
-
     },
 
-    parseBlocks(doc, className) {
+    clean(text){
 
-        const output = [];
+        if(!text) return "";
 
-        doc
-            .querySelectorAll(
-                "." + className + " .skillBlock"
-            )
-            .forEach(block => {
-
-                output.push({
-
-                    title:
-                        this.text(
-                            block.querySelector(
-                                ".skillHeader"
-                            )
-                        ),
-
-                    description:
-                        this.text(
-                            block.querySelector(
-                                ".skillText"
-                            )
-                        )
-
-                });
-
-            });
-
-        return output;
-
-    },
-
-    text(node) {
-
-        if (!node)
-            return "";
-
-        return node.textContent
-            .replace(/\s+/g, " ")
+        return text
+            .replace(/\s+/g," ")
+            .replace(/\u00a0/g," ")
             .trim();
 
     }
