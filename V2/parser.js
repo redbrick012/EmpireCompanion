@@ -115,7 +115,31 @@ const Parser = {
         });
 
     },
+parseBlocks(container) {
 
+    const list = [];
+
+    if (!container) return list;
+
+    container.querySelectorAll(".skillBlock").forEach(block => {
+
+        list.push({
+
+            title: this.clean(
+                block.querySelector(".skillHeader")?.textContent
+            ),
+
+            description: this.clean(
+                block.querySelector(".skillText")?.textContent
+            )
+
+        });
+
+    });
+
+    return list;
+
+},
     clean(text) {
 
         if (!text) return "";
