@@ -125,6 +125,21 @@ const App = {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    App.init();
+    try {
+
+        App.init();
+
+    } catch (e) {
+
+        alert(
+            "APP ERROR\n\n" +
+            e.message +
+            "\n\n" +
+            e.stack
+        );
+
+        console.error(e);
+
+    }
 
 });
