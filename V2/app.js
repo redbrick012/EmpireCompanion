@@ -2,36 +2,28 @@ const App = {
 
     init() {
 
-        document
-            .getElementById("importButton")
-            .addEventListener("click", () => {
+        const button = document.getElementById("importButton");
+        const fileInput = document.getElementById("characterFile");
 
-                document
-                    .getElementById("characterFile")
-                    .click();
+        button.addEventListener("click", () => {
+            fileInput.click();
+        });
 
-            });
+        fileInput.addEventListener("change", async (e) => {
 
-        document
-            .getElementById("characterFile")
-            .addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
 
-                const file = e.target.files[0];
+            await Importer.importFile(file);
 
-                if (!file) return;
+            fileInput.value = "";
 
-                await Importer.importFile(file);
+        });
 
-                e.target.value = "";
+        const saved = Storage.getCharacter();
 
-            });
-
-        const character = Storage.getCharacter();
-
-        if (character) {
-
-            this.characterImported(character);
-
+        if (saved) {
+            this.characterImported(saved);
         }
 
     },
@@ -48,21 +40,37 @@ const App = {
 
         const d = character.details;
 
-        document.getElementById("characterName").textContent = d.name || "Unknown";
+        document.getElementById("characterName").textContent =
+            d.name || "Unnamed Character";
+
         document.getElementById("characterSummary").textContent =
-            `${d.nation || ""} ${d.lineage || ""} ${d.archetype || ""}`.trim();
+            `${d.nation} • ${d.lineage} • ${d.archetype}`;
 
-        document.getElementById("charName").textContent = d.name || "";
-        document.getElementById("charNation").textContent = d.nation || "";
+        document.getElementById("charName").textContent =
+            d.name;
 
-        document.getElementById("cid").textContent = d.cid || "";
-        document.getElementById("nation").textContent = d.nation || "";
-        document.getElementById("lineage").textContent = d.lineage || "";
-        document.getElementById("archetype").textContent = d.archetype || "";
-        document.getElementById("banner").textContent = d.banner || "";
-        document.getElementById("territory").textContent = d.territory || "";
-        document.getElementById("resource").textContent = d.resource || "";
-        document.getElementById("status").textContent = d.status || "";
+        document.getElementById("charNation").textContent =
+            d.nation;
+
+        const ids = [
+            "cid",
+            "nation",
+            "lineage",
+            "archetype",
+            "banner",
+            "territory",
+            "resource",
+            "status"
+        ];
+
+        ids.forEach(id => {
+
+            const el = document.getElementById(id);
+
+            if (el)
+                el.textContent = d[id] || "";
+
+        });
 
     }
 
