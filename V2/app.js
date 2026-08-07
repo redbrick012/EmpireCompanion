@@ -29,37 +29,41 @@ const App = {
     },
 
     characterImported(character) {
-document.getElementById("welcomePage")?.classList.remove("active");
-document.getElementById("homePage")?.classList.add("active");
-       const d = character.details;
 
-document.getElementById("characterName").textContent = d.name || "";
-document.getElementById("characterSummary").textContent =
-`${d.nation} • ${d.lineage} • ${d.archetype}`;
+    alert("characterImported() called");
 
-document.getElementById("charName").textContent = d.name || "";
-document.getElementById("charNation").textContent = d.nation || "";
+    document.getElementById("welcomePage").classList.remove("active");
+    document.getElementById("homePage").classList.add("active");
 
-[
-"cid",
-"nation",
-"lineage",
-"archetype",
-"virtue",
-"banner",
-"territory",
-"resource",
-"status",
-"level"
-].forEach(id => {
+    const d = character.details;
 
-    const el = document.getElementById(id);
+    document.getElementById("characterName").textContent = d.name || "";
+    document.getElementById("characterSummary").textContent =
+        `${d.nation} • ${d.lineage} • ${d.archetype}`;
 
-    if (el)
-        el.textContent = d[id] ?? "";
+    document.getElementById("charName").textContent = d.name || "";
+    document.getElementById("charNation").textContent = d.nation || "";
 
-}); 
+    [
+        "cid",
+        "nation",
+        "lineage",
+        "archetype",
+        "virtue",
+        "banner",
+        "territory",
+        "resource",
+        "status",
+        "level"
+    ].forEach(id => {
 
+        const el = document.getElementById(id);
+
+        if (el) {
+            el.textContent = d[id] ?? "";
+        }
+
+    });
 
     }
 
