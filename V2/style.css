@@ -5,24 +5,23 @@
 
 :root{
 
-    --bg:#0d0f11;
-    --surface:#073763;
-    --surface2:#22291e;
+    --bg:#08111d;              /* Deep midnight blue */
+    --surface:#10233d;         /* Main cards */
+    --surface2:#183657;        /* Pressed/secondary */
 
-    --border:#2d303a;
+    --border:#2d4f73;
 
-    --text:#f5f6f3;
-    --muted:#a1a4b2;
+    --text:#f4f8ff;
+    --muted:#9cb6d3;
 
-    --primary:#6b6ab3;
-    --primaryDark:#4c467f;
+    --primary:#4f8fe8;         /* Bright Empire blue */
+    --primaryDark:#2e6fc8;
 
-    --danger:#d77070;
-    --mana:#7ca4d9;
-    --gold:#d5b86a;
+    --danger:#d96b6b;
+    --mana:#76c5ff;
+    --gold:#d9b75d;
 
     --radius:18px;
-
 }
 
 *{
@@ -40,8 +39,8 @@ body{
     background:
         radial-gradient(
             circle at top,
-            #1d2619,
-            var(--bg) 50%
+            #123866,
+            var(--bg) 55%
         );
 
     color:var(--text);
@@ -54,7 +53,6 @@ body{
         sans-serif;
 
     min-height:100vh;
-
 }
 
 #app{
@@ -226,10 +224,16 @@ header h2{
 ========================================== */
 
 .card{
-
-    background:var(--surface);
+    background:linear-gradient(
+        180deg,
+        #143055,
+        #10233d
+    );
 
     border:1px solid var(--border);
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,.35);
 
     border-radius:var(--radius);
 
@@ -261,38 +265,23 @@ header h2{
 
 .menu-button{
 
-    display:flex;
+    background:#10233d;
 
-    align-items:center;
-
-    gap:14px;
-
-    width:100%;
-
-    min-height:66px;
-
-    padding:16px;
+    transition:.2s;
 
     border:1px solid var(--border);
+}
 
-    border-radius:16px;
+.menu-button:hover{
 
-    background:var(--surface);
+    background:#183657;
 
-    color:var(--text);
-
-    font-size:1rem;
-
-    text-align:left;
-
+    border-color:#4f8fe8;
 }
 
 .menu-button:active{
 
-    transform:scale(.98);
-
-    background:var(--surface2);
-
+    background:#214874;
 }
 
 /* ==========================================
