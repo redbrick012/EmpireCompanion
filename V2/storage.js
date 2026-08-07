@@ -1,81 +1,78 @@
-/*
-==========================================
-Empire Companion V2
-Storage Manager
-==========================================
-*/
-
 const Storage = {
 
-    KEY: "empire-companion-v2",
+    CHARACTERS_KEY: "empire.characters",
+    CURRENT_KEY: "empire.current",
+
+    getCharacters() {
+        return JSON.parse(localStorage.getItem(this.CHARACTERS_KEY) || "[]");
+    },
 
     saveCharacter(character) {
 
-        try {
+        const characters = this.getCharacters();
 
-            localStorage.setItem(
-                this.KEY,
-                JSON.stringify(character)
-            );
+        const index = characters.findIndex(
+            c => c.details.cid === character.details.cid
+        );
 
-            console.log(
-                "Character saved."
-            );
+        if (index >= 0) {
+            characters[index] = character;
+        } else {
+            characters.push(character);
+        }
 
-            return true;
+        localStorage.setItem(
+            this.CHARACTERS_KEY,
+            JSON.stringify(characters)
+        );
 
-        } catch (error) {
+        this.setCurrentCharacter(character.details.cid);
+    },
 
-            console.error(
-                "Could not save character.",
-                error
-            );
+    deleteCharacter(cid) {
 
-            return false;
+        let characters = this.getCharacters();
+
+        characters = characters.filter(
+            c => c.details.cid !== cid
+        );
+
+        localStorage.setItem(
+            this.CHARACTERS_KEY,
+            JSON.stringify(characters)
+        );
+
+        if (this.getCurrentCharacter()?.details.cid === cid) {
+
+            if (characters.length) {
+
+                this.setCurrentCharacter(characters[0].details.cid);
+
+            } else {
+
+                localStorage.removeItem(this.CURRENT_KEY);
+
+            }
 
         }
 
     },
 
-    getCharacter() {
+    getCurrentCharacter() {
 
-        try {
+        const cid = localStorage.getItem(this.CURRENT_KEY);
 
-            const data =
-                localStorage.getItem(
-                    this.KEY
-                );
-
-            if (!data)
-                return null;
-
-            return JSON.parse(data);
-
-        } catch (error) {
-
-            console.error(
-                "Could not load character.",
-                error
-            );
-
-            return null;
-
-        }
-
-    },
-
-    deleteCharacter() {
-
-        localStorage.removeItem(
-            this.KEY
+        return this.getCharacters().find(
+            c => c.details.cid === cid
         );
 
     },
 
-    hasCharacter() {
+    setCurrentCharacter(cid) {
 
-        return (
-            this.getCharacter() !== null
+        localStorage.setItem(
+            this.CURRENT_KEY,
+            cid
         );
 
     }
