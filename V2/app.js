@@ -30,47 +30,35 @@ const App = {
 
     characterImported(character) {
 
-        document
-            .getElementById("welcomePage")
-            .classList.remove("active");
+       const d = character.details;
 
-        document
-            .getElementById("homePage")
-            .classList.add("active");
+document.getElementById("characterName").textContent = d.name || "";
+document.getElementById("characterSummary").textContent =
+`${d.nation} • ${d.lineage} • ${d.archetype}`;
 
-        const d = character.details;
+document.getElementById("charName").textContent = d.name || "";
+document.getElementById("charNation").textContent = d.nation || "";
 
-        document.getElementById("characterName").textContent =
-            d.name || "Unnamed Character";
+[
+"cid",
+"nation",
+"lineage",
+"archetype",
+"virtue",
+"banner",
+"territory",
+"resource",
+"status",
+"level"
+].forEach(id => {
 
-        document.getElementById("characterSummary").textContent =
-            `${d.nation} • ${d.lineage} • ${d.archetype}`;
+    const el = document.getElementById(id);
 
-        document.getElementById("charName").textContent =
-            d.name;
+    if (el)
+        el.textContent = d[id] ?? "";
 
-        document.getElementById("charNation").textContent =
-            d.nation;
+}); 
 
-        const ids = [
-            "cid",
-            "nation",
-            "lineage",
-            "archetype",
-            "banner",
-            "territory",
-            "resource",
-            "status"
-        ];
-
-        ids.forEach(id => {
-
-            const el = document.getElementById(id);
-
-            if (el)
-                el.textContent = d[id] || "";
-
-        });
 
     }
 
