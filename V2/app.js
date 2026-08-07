@@ -20,7 +20,7 @@ const App = {
 
         });
 
-        const saved = Storage.getCharacter();
+        const saved = Storage.getCurrentCharacter();
 
         if (saved) {
             this.characterImported(saved);
