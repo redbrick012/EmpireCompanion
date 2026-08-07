@@ -77,45 +77,47 @@ const Parser = {
 
         });
 
-        // Skills
-        doc.querySelectorAll(".skill, .characterSkill").forEach(skill => {
-            character.skills.push({
-                name: skill.textContent.trim()
-            });
-        });
+        // Parse all skill blocks
+let section = "";
 
-        // Rituals
-        doc.querySelectorAll(".ritual").forEach(ritual => {
-            character.rituals.push({
-                name: ritual.textContent.trim()
-            });
-        });
+doc.querySelectorAll("h2, h3, .skillBlock").forEach(node => {
 
-        // Spells
-        doc.querySelectorAll(".spell").forEach(spell => {
-            character.spells.push({
-                name: spell.textContent.trim()
-            });
-        });
-
-        // Background
-        const bg = [...doc.querySelectorAll("h2,h3")]
-            .find(h => h.textContent.includes("Background"));
-
-        if (bg) {
-            let text = "";
-            let node = bg.nextElementSibling;
-
-            while (node && !/^H[23]$/.test(node.tagName)) {
-                text += node.textContent + "\n";
-                node = node.nextElementSibling;
-            }
-
-            character.details.background = text.trim();
-        }
-
-        return character;
-
+    if (node.matches("h2,h3")) {
+        section = node.textContent.trim();
+        return;
     }
+
+    const text = node.textContent.trim();
+
+    switch (section) {
+
+        case "Bonded Items":
+            character.bondedItems.push(text);
+            break;
+
+        case "Rituals":
+            character.rituals.push(text);
+            break;
+
+        case "Spells":
+            character.spells.push(text);
+            break;
+
+        default:
+            character.skills.push(text);
+            break;
+    }
+
+});
+
+        alert(
+    `Skills: ${character.skills.length}
+Rituals: ${character.rituals.length}
+Spells: ${character.spells.length}
+Bonded: ${character.bondedItems.length}`
+);
+ return character;
+
+    }       
 
 };
