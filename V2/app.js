@@ -113,7 +113,7 @@ button.addEventListener("click", () => {
             };
 
             if(current && current.details.cid===character.details.cid){
-                row.style.background="#24331f";
+                row.style.background="#183657";
             }
 
             list.appendChild(row);
