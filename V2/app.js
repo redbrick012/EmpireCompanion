@@ -63,7 +63,25 @@ alert("4 - " + JSON.stringify(d));
         if (el) {
             el.textContent = d[id] ?? "";
         }
+document.getElementById("skillsList").innerHTML =
+    character.skills
+        .map(skill => `<div class="detail-row"><span>${skill}</span></div>`)
+        .join("");
 
+document.getElementById("ritualsList").innerHTML =
+    character.rituals
+        .map(ritual => `<div class="detail-row"><span>${ritual}</span></div>`)
+        .join("");
+
+document.getElementById("spellsList").innerHTML =
+    character.spells
+        .map(spell => `<div class="detail-row"><span>${spell}</span></div>`)
+        .join("");
+
+document.getElementById("bondedList").innerHTML =
+    character.bondedItems
+        .map(item => `<div class="detail-row"><span>${item}</span></div>`)
+        .join("");
     });
 
     }
