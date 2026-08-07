@@ -123,6 +123,7 @@ Rituals: ${character.rituals.length}
 Spells: ${character.spells.length}
 Bonded: ${character.bondedItems.length}`
 );
+        alert(JSON.stringify(character.details, null, 2));
  return character;
 
     }       
