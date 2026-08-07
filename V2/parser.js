@@ -89,24 +89,31 @@ doc.querySelectorAll("h2, h3, .skillBlock").forEach(node => {
 
     const text = node.textContent.trim();
 
-    switch (section) {
+    const lower = text.toLowerCase();
 
-        case "Bonded Items":
-            character.bondedItems.push(text);
-            break;
+if (
+    lower.includes("magnitude") ||
+    lower.includes(" realm ")
+) {
 
-        case "Rituals":
-            character.rituals.push(text);
-            break;
+    character.rituals.push(text);
 
-        case "Spells":
-            character.spells.push(text);
-            break;
+}
+else if (
+    text.startsWith("Create Bond") ||
+    text.startsWith("Detect Magic") ||
+    text.startsWith("Heal") ||
+    text.startsWith("Operate Portal")
+) {
 
-        default:
-            character.skills.push(text);
-            break;
-    }
+    character.spells.push(text);
+
+}
+else {
+
+    character.skills.push(text);
+
+}
 
 });
 
