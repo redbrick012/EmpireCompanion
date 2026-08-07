@@ -85,7 +85,7 @@ document.getElementById("bondedList").innerHTML =
     });
 
     }
-
+App.renderCharacters();
 };
 
 document.addEventListener("DOMContentLoaded", () => {
