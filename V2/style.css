@@ -219,6 +219,35 @@ header h2{
 
 }
 
+.header-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-transform:uppercase;
+    letter-spacing:.15em;
+}
+
+.header-logo{
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+
+    background:linear-gradient(
+        180deg,
+        #4f8fe8,
+        #2e6fc8
+    );
+
+    border-radius:14px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,.25);
+}
+
 /* ==========================================
    CARD
 ========================================== */
