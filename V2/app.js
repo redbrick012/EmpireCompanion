@@ -29,14 +29,16 @@ const App = {
     },
 
     characterImported(character) {
-
+alert("1 - Entered characterImported");
     alert("characterImported() called");
 
     document.getElementById("welcomePage").classList.remove("active");
-    document.getElementById("homePage").classList.add("active");
+   alert("2 - Removed welcome");
+        document.getElementById("homePage").classList.add("active");
+        alert("3 - Added homepage");
 
     const d = character.details;
-
+alert("4 - " + JSON.stringify(d));
     document.getElementById("characterName").textContent = d.name || "";
     document.getElementById("characterSummary").textContent =
         `${d.nation} • ${d.lineage} • ${d.archetype}`;
