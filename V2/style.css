@@ -5,17 +5,17 @@
 
 :root{
 
-    --bg:#0d100c;
-    --surface:#171c15;
+    --bg:#0d0f11;
+    --surface:#073763;
     --surface2:#22291e;
 
-    --border:#313a2d;
+    --border:#2d303a;
 
     --text:#f5f6f3;
-    --muted:#a8b2a1;
+    --muted:#a1a4b2;
 
-    --primary:#8db36a;
-    --primaryDark:#5f7f46;
+    --primary:#6b6ab3;
+    --primaryDark:#4c467f;
 
     --danger:#d77070;
     --mana:#7ca4d9;
