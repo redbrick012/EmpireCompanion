@@ -1,165 +1,120 @@
-/*
-==========================================
-Empire Companion
-Parser V2
-==========================================
-*/
-
 const Parser = {
 
-    parse(fileText) {
-
-        let html = fileText;
-
-        // Extract HTML from MHT
-        const start = fileText.indexOf("<!DOCTYPE html");
-
-        if (start > -1) {
-            html = fileText.substring(start);
-        }
+    parse(html) {
 
         const doc = new DOMParser().parseFromString(html, "text/html");
 
-        const character = CharacterModel.create();
+        const character = {
+            details: {},
+            skills: [],
+            rituals: [],
+            spells: [],
+            ribbons: [],
+            bondedItems: [],
+            notes: ""
+        };
 
-        character.imported = new Date().toISOString();
+        // Read every viewer table
+        doc.querySelectorAll("table.viewerTable").forEach(table => {
 
- this.parseDetails(doc, character);
+            table.querySelectorAll("tr").forEach(row => {
 
-character.spells = this.parseBlocks(
-    doc.querySelector(".spellList")
-);
+                const cells = row.querySelectorAll("th,td");
 
-character.rituals = this.parseBlocks(
-    doc.querySelector(".ritualList")
-);
+                if (cells.length < 2) return;
 
-character.skills = this.parseBlocks(
-    doc.querySelector(".skillList")
-);
+                const key = cells[0].textContent.trim().replace(/:$/, "");
+                const value = cells[1].textContent.trim();
 
-return character;
+                switch (key) {
 
-    },
+                    case "CID":
+                        character.details.cid = value;
+                        break;
 
-    parseDetails(doc, character) {
+                    case "Name":
+                        character.details.name = value;
+                        break;
 
-        // Character name
-        const name = doc.querySelector("h1");
+                    case "Nation":
+                        character.details.nation = value;
+                        break;
 
-        if (name) {
-            character.details.name = this.clean(name.textContent);
-        }
+                    case "Lineage":
+                        character.details.lineage = value;
+                        break;
 
-        // Details table
-        const table = doc.querySelector("table.viewerTable");
+                    case "Archetype":
+                        character.details.archetype = value;
+                        break;
 
-        if (!table) {
-            alert("Character table not found.");
-            return;
-        }
+                    case "Virtue":
+                        character.details.virtue = value;
+                        break;
 
-        table.querySelectorAll("tr").forEach(row => {
+                    case "Banner":
+                        character.details.banner = value;
+                        break;
 
-            const cells = row.querySelectorAll("td");
+                    case "Territory":
+                        character.details.territory = value;
+                        break;
 
-            if (cells.length !== 2) return;
+                    case "Resource":
+                        character.details.resource = value;
+                        break;
 
-            const label = this.clean(cells[0].textContent);
-            const value = this.clean(cells[1].textContent);
+                    case "Status":
+                        character.details.status = value;
+                        break;
 
-            switch (label) {
+                    case "Level":
+                        character.details.level = value;
+                        break;
+                }
 
-                case "CID":
-                    character.details.cid = value;
-                    break;
+            });
 
-                case "Nation":
-                    character.details.nation = value;
-                    break;
+        });
 
-                case "Lineage":
-                    character.details.lineage = value;
-                    break;
+        // Skills
+        doc.querySelectorAll(".skill, .characterSkill").forEach(skill => {
+            character.skills.push({
+                name: skill.textContent.trim()
+            });
+        });
 
-                case "Archetype":
-                    character.details.archetype = value;
-                    break;
+        // Rituals
+        doc.querySelectorAll(".ritual").forEach(ritual => {
+            character.rituals.push({
+                name: ritual.textContent.trim()
+            });
+        });
 
-                case "Virtue":
-                    character.details.virtue = value;
-                    break;
+        // Spells
+        doc.querySelectorAll(".spell").forEach(spell => {
+            character.spells.push({
+                name: spell.textContent.trim()
+            });
+        });
 
-                case "Banner":
-                    character.details.banner = value;
-                    break;
+        // Background
+        const bg = [...doc.querySelectorAll("h2,h3")]
+            .find(h => h.textContent.includes("Background"));
 
-                case "Coven":
-                    character.details.coven = value;
-                    break;
+        if (bg) {
+            let text = "";
+            let node = bg.nextElementSibling;
 
-                case "Sect":
-                    character.details.sect = value;
-                    break;
-
-                case "Territory":
-                    character.details.territory = value;
-                    break;
-
-                case "Resource":
-                    character.details.resource = value;
-                    break;
-
-                case "Level":
-                    character.details.level = value;
-                    break;
-
-                case "Status":
-                    character.details.status = value;
-                    break;
-
-                case "Points Spent":
-                    character.details.pointsSpent = value;
-                    break;
-
+            while (node && !/^H[23]$/.test(node.tagName)) {
+                text += node.textContent + "\n";
+                node = node.nextElementSibling;
             }
 
-        });
+            character.details.background = text.trim();
+        }
 
-    },
-parseBlocks(container) {
-
-    const list = [];
-
-    if (!container) return list;
-
-    container.querySelectorAll(".skillBlock").forEach(block => {
-
-        list.push({
-
-            title: this.clean(
-                block.querySelector(".skillHeader")?.textContent
-            ),
-
-            description: this.clean(
-                block.querySelector(".skillText")?.textContent
-            )
-
-        });
-
-    });
-
-    return list;
-
-},
-    clean(text) {
-
-        if (!text) return "";
-
-        return text
-            .replace(/\u00a0/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
+        return character;
 
     }
 
