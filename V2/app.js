@@ -20,109 +20,187 @@ const App = {
 
         });
 
-        const saved = Storage.getCurrentCharacter();
+        const current = Storage.getCurrentCharacter();
 
-        if (saved) {
-            this.characterImported(saved);
+        if (current) {
+
+            this.characterImported(current);
+
         }
 
     },
-characterImported(character) {
 
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-    });
+    characterImported(character) {
 
-    document.getElementById("homePage").classList.add("active");
+        // Switch pages
+        document.querySelectorAll(".page").forEach(page => {
+            page.classList.remove("active");
+        });
 
+        document.getElementById("homePage").classList.add("active");
 
-    const d = character.details;
-alert("4 - " + JSON.stringify(d));
-    document.getElementById("characterName").textContent = d.name || "";
-    document.getElementById("characterSummary").textContent =
-        `${d.nation} • ${d.lineage} • ${d.archetype}`;
+        const d = character.details;
 
-    document.getElementById("charName").textContent = d.name || "";
-    document.getElementById("charNation").textContent = d.nation || "";
+        // Header
+        document.getElementById("characterName").textContent =
+            d.name || "Unknown Character";
 
-    [
-        "cid",
-        "nation",
-        "lineage",
-        "archetype",
-        "virtue",
-        "banner",
-        "territory",
-        "resource",
-        "status",
-        "level"
-    ].forEach(id => {
+        document.getElementById("charName").textContent =
+            d.name || "Unknown Character";
 
-        const el = document.getElementById(id);
+        document.getElementById("charNation").textContent =
+            d.nation || "";
 
-        if (el) {
-            el.textContent = d[id] ?? "";
-        }
-document.getElementById("skillsList").innerHTML =
-    character.skills
-        .map(skill => `<div class="detail-row"><span>${skill}</span></div>`)
-        .join("");
+        document.getElementById("characterSummary").textContent =
+            `${d.nation || ""} • ${d.lineage || ""} • ${d.archetype || ""}`;
 
-document.getElementById("ritualsList").innerHTML =
-    character.rituals
-        .map(ritual => `<div class="detail-row"><span>${ritual}</span></div>`)
-        .join("");
+        // Detail tiles
+        [
+            "cid",
+            "nation",
+            "lineage",
+            "archetype",
+            "virtue",
+            "banner",
+            "territory",
+            "resource",
+            "status",
+            "level"
+        ].forEach(id => {
 
-document.getElementById("spellsList").innerHTML =
-    character.spells
-        .map(spell => `<div class="detail-row"><span>${spell}</span></div>`)
-        .join("");
+            const el = document.getElementById(id);
 
-document.getElementById("bondedList").innerHTML =
-    character.bondedItems
-        .map(item => `<div class="detail-row"><span>${item}</span></div>`)
-        .join("");
-    });
+            if (el) {
+                el.textContent = d[id] || "";
+            }
+
+        });
+
+        // Skills
+        document.getElementById("skillsList").innerHTML =
+            character.skills
+                .map(skill => `
+                    <div class="detail-row">
+                        <span>${skill}</span>
+                    </div>
+                `)
+                .join("");
+
+        // Rituals
+        document.getElementById("ritualsList").innerHTML =
+            character.rituals
+                .map(ritual => `
+                    <div class="detail-row">
+                        <span>${ritual}</span>
+                    </div>
+                `)
+                .join("");
+
+        // Spells
+        document.getElementById("spellsList").innerHTML =
+            character.spells
+                .map(spell => `
+                    <div class="detail-row">
+                        <span>${spell}</span>
+                    </div>
+                `)
+                .join("");
+
+        // Bonded Items
+        document.getElementById("bondedList").innerHTML =
+            character.bondedItems
+                .map(item => `
+                    <div class="detail-row">
+                        <span>${item}</span>
+                    </div>
+                `)
+                .join("");
+
+        this.renderCharacters();
+
+    },
+
+    renderCharacters() {
+
+        const list = document.getElementById("characterList");
+
+        if (!list) return;
+
+        list.innerHTML = "";
+
+        const current = Storage.getCurrentCharacter();
+
+        Storage.getCharacters().forEach(character => {
+
+            const row = document.createElement("div");
+
+            row.className = "detail-row";
+
+            row.innerHTML = `
+                <span>
+                    <strong>${character.details.name || "Unknown"}</strong><br>
+                    ${character.details.nation || ""}
+                </span>
+
+                <div>
+
+                    <button class="switchButton">
+                        Open
+                    </button>
+
+                    <button class="deleteButton">
+                        🗑
+                    </button>
+
+                </div>
+            `;
+
+            row.querySelector(".switchButton").onclick = () => {
+
+                Storage.setCurrentCharacter(
+                    character.details.cid
+                );
+
+                this.characterImported(character);
+
+            };
+
+            row.querySelector(".deleteButton").onclick = () => {
+
+                if (!confirm(`Delete ${character.details.name}?`))
+                    return;
+
+                Storage.deleteCharacter(character.details.cid);
+
+                const next = Storage.getCurrentCharacter();
+
+                if (next) {
+
+                    this.characterImported(next);
+
+                } else {
+
+                    location.reload();
+
+                }
+
+            };
+
+            if (
+                current &&
+                current.details.cid === character.details.cid
+            ) {
+
+                row.style.background = "#253221";
+
+            }
+
+            list.appendChild(row);
+
+        });
 
     }
-App.renderCharacters();
-renderCharacters() {
 
-    const list =
-        document.getElementById("characterList");
-
-    const current =
-        Storage.getCurrentCharacter();
-
-    list.innerHTML = "";
-
-    Storage.getCharacters().forEach(character => {
-
-        const card =
-            document.createElement("div");
-
-        card.className = "detail-row";
-
-        card.innerHTML = `
-<strong>${character.details.name}</strong>
-<span>${character.details.nation}</span>
-`;
-
-        card.onclick = () => {
-
-            Storage.setCurrentCharacter(
-                character.details.cid
-            );
-
-            this.characterImported(character);
-
-        };
-
-        list.appendChild(card);
-
-    });
-
-}
 };
 
 document.addEventListener("DOMContentLoaded", () => {
