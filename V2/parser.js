@@ -3,28 +3,8 @@ const Parser = {
     parse(html) {
 
         const doc = new DOMParser().parseFromString(html, "text/html");
-// Try to find the character name from the page heading
-const headings = [...doc.querySelectorAll("h1,h2,h3,.characterName,.pageTitle")];
 
-for (const heading of headings) {
-
-    const text = heading.textContent.trim();
-
-    if (
-        text &&
-        text !== "Character" &&
-        text !== "Empire Companion" &&
-        text.length < 40
-    ) {
-
-        characterName = text;
-        break;
-
-    }
-
-}
         const character = {
-            let characterName = "";
             details: {},
             skills: [],
             rituals: [],
@@ -34,121 +14,64 @@ for (const heading of headings) {
             notes: ""
         };
 
-        // Read every viewer table
-        doc.querySelectorAll("table.viewerTable").forEach(table => {
+        // Character name
+        const h1 = doc.querySelector("#DisplayActiveCharacter h1");
+        if (h1) character.details.name = h1.textContent.trim();
 
-            table.querySelectorAll("tr").forEach(row => {
+        // Details table
+        doc.querySelectorAll("table.viewerTable tr").forEach(row => {
+            const cells = row.querySelectorAll("th,td");
+            if (cells.length < 2) return;
 
-                const cells = row.querySelectorAll("th,td");
+            const key = cells[0].textContent.trim().replace(/:$/,"");
+            const value = cells[1].textContent.trim();
 
-                if (cells.length < 2) return;
-
-                const key = cells[0].textContent.trim().replace(/:$/, "");
-                const value = cells[1].textContent.trim();
-
-                switch (key) {
-
-                    case "CID":
-                        character.details.cid = value;
-                        break;
-
-                    case "Name":
-                        character.details.name = value;
-                        break;
-
-                    case "Nation":
-                        character.details.nation = value;
-                        break;
-
-                    case "Lineage":
-                        character.details.lineage = value;
-                        break;
-
-                    case "Archetype":
-                        character.details.archetype = value;
-                        break;
-
-                    case "Virtue":
-                        character.details.virtue = value;
-                        break;
-
-                    case "Banner":
-                        character.details.banner = value;
-                        break;
-
-                    case "Territory":
-                        character.details.territory = value;
-                        break;
-
-                    case "Resource":
-                        character.details.resource = value;
-                        break;
-
-                    case "Status":
-                        character.details.status = value;
-                        break;
-
-                    case "Level":
-                        character.details.level = value;
-                        break;
-                }
-
-            });
-
+            switch (key) {
+                case "CID": character.details.cid = value; break;
+                case "Nation": character.details.nation = value; break;
+                case "Lineage": character.details.lineage = value; break;
+                case "Archetype": character.details.archetype = value; break;
+                case "Virtue": character.details.virtue = value; break;
+                case "Banner": character.details.banner = value; break;
+                case "Territory": character.details.territory = value; break;
+                case "Resource": character.details.resource = value; break;
+                case "Status": character.details.status = value; break;
+                case "Level": character.details.level = value; break;
+                case "Coven": character.details.coven = value; break;
+                case "Sect": character.details.sect = value; break;
+                case "Points Spent": character.details.pointsSpent = value; break;
+            }
         });
 
-        // Parse all skill blocks
-let section = "";
+        const spellNames = [
+            "Create Bond","Detect Magic","Heal","Operate Portal"
+        ];
 
-doc.querySelectorAll("h2, h3, .skillBlock").forEach(node => {
+        doc.querySelectorAll(".skillBlock").forEach(block => {
+            const text = block.textContent.replace(/\s+/g," ").trim();
+            const lower = text.toLowerCase();
 
-    if (node.matches("h2,h3")) {
-        section = node.textContent.trim();
-        return;
+            if (!text) return;
+
+            if (lower.includes("expires just before") ||
+                lower.includes("(jewellery)") ||
+                lower.includes("(weapon)") ||
+                lower.includes("(armour)") ||
+                lower.includes("(trinket)")) {
+                character.bondedItems.push(text);
+            }
+            else if (lower.includes("magnitude") && lower.includes("realm")) {
+                character.rituals.push(text);
+            }
+            else if (spellNames.some(s => text.startsWith(s))) {
+                character.spells.push(text);
+            }
+            else {
+                character.skills.push(text);
+            }
+        });
+
+        return character;
     }
-
-    const text = node.textContent.trim();
-
-    const lower = text.toLowerCase();
-
-if (
-    lower.includes("magnitude") ||
-    lower.includes(" realm ")
-) {
-
-    character.rituals.push(text);
-
-}
-else if (
-    text.startsWith("Create Bond") ||
-    text.startsWith("Detect Magic") ||
-    text.startsWith("Heal") ||
-    text.startsWith("Operate Portal")
-) {
-
-    character.spells.push(text);
-
-}
-else {
-
-    character.skills.push(text);
-
-}
-
-});
-
-        alert(
-    `Skills: ${character.skills.length}
-Rituals: ${character.rituals.length}
-Spells: ${character.spells.length}
-Bonded: ${character.bondedItems.length}`
-);
-        alert(JSON.stringify(character.details, null, 2));
-if (!character.details.name && characterName) {
-    character.details.name = characterName;
-}
- return character;
-
-    }       
 
 };
