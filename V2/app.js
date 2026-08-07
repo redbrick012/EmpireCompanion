@@ -6,11 +6,11 @@ const App = {
 const button = document.getElementById("importButton");
 const fileInput = document.getElementById("characterFile");
 
-alert("Button exists: " + !!button);
-alert("File input exists: " + !!fileInput);
+//alert("Button exists: " + !!button);
+//alert("File input exists: " + !!fileInput);
 
 button.addEventListener("click", () => {
-    alert("Button pressed");
+    //alert("Button pressed");
     fileInput.click();
 });
         document.getElementById("importAnother")?.addEventListener("click", () => this.fileInput.click());
