@@ -4,7 +4,35 @@ const Storage = {
     CURRENT_KEY: "empire.current",
 
     getCharacters() {
-        return JSON.parse(localStorage.getItem(this.CHARACTERS_KEY) || "[]");
+
+        return JSON.parse(
+            localStorage.getItem(this.CHARACTERS_KEY) || "[]"
+        );
+
+    },
+
+    getCharacter(cid) {
+
+        return this.getCharacters().find(
+            c => c.details.cid === cid
+        );
+
+    },
+
+    getCurrentCharacter() {
+
+        const cid = localStorage.getItem(this.CURRENT_KEY);
+
+        if (!cid) return null;
+
+        return this.getCharacter(cid);
+
+    },
+
+    setCurrentCharacter(cid) {
+
+        localStorage.setItem(this.CURRENT_KEY, cid);
+
     },
 
     saveCharacter(character) {
@@ -16,9 +44,13 @@ const Storage = {
         );
 
         if (index >= 0) {
+
             characters[index] = character;
+
         } else {
+
             characters.push(character);
+
         }
 
         localStorage.setItem(
@@ -27,13 +59,12 @@ const Storage = {
         );
 
         this.setCurrentCharacter(character.details.cid);
+
     },
 
     deleteCharacter(cid) {
 
-        let characters = this.getCharacters();
-
-        characters = characters.filter(
+        const characters = this.getCharacters().filter(
             c => c.details.cid !== cid
         );
 
@@ -42,11 +73,15 @@ const Storage = {
             JSON.stringify(characters)
         );
 
-        if (this.getCurrentCharacter()?.details.cid === cid) {
+        const current = localStorage.getItem(this.CURRENT_KEY);
+
+        if (current === cid) {
 
             if (characters.length) {
 
-                this.setCurrentCharacter(characters[0].details.cid);
+                this.setCurrentCharacter(
+                    characters[0].details.cid
+                );
 
             } else {
 
@@ -58,22 +93,10 @@ const Storage = {
 
     },
 
-    getCurrentCharacter() {
+    clearCharacters() {
 
-        const cid = localStorage.getItem(this.CURRENT_KEY);
-
-        return this.getCharacters().find(
-            c => c.details.cid === cid
-        );
-
-    },
-
-    setCurrentCharacter(cid) {
-
-        localStorage.setItem(
-            this.CURRENT_KEY,
-            cid
-        );
+        localStorage.removeItem(this.CHARACTERS_KEY);
+        localStorage.removeItem(this.CURRENT_KEY);
 
     }
 
