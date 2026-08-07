@@ -3,8 +3,28 @@ const Parser = {
     parse(html) {
 
         const doc = new DOMParser().parseFromString(html, "text/html");
+// Try to find the character name from the page heading
+const headings = [...doc.querySelectorAll("h1,h2,h3,.characterName,.pageTitle")];
 
+for (const heading of headings) {
+
+    const text = heading.textContent.trim();
+
+    if (
+        text &&
+        text !== "Character" &&
+        text !== "Empire Companion" &&
+        text.length < 40
+    ) {
+
+        characterName = text;
+        break;
+
+    }
+
+}
         const character = {
+            let characterName = "";
             details: {},
             skills: [],
             rituals: [],
@@ -124,6 +144,9 @@ Spells: ${character.spells.length}
 Bonded: ${character.bondedItems.length}`
 );
         alert(JSON.stringify(character.details, null, 2));
+if (!character.details.name && characterName) {
+    character.details.name = characterName;
+}
  return character;
 
     }       
