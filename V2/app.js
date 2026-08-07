@@ -27,15 +27,14 @@ const App = {
         }
 
     },
+characterImported(character) {
 
-    characterImported(character) {
-alert("1 - Entered characterImported");
-    alert("characterImported() called");
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
 
-    document.getElementById("welcomePage").classList.remove("active");
-   alert("2 - Removed welcome");
-        document.getElementById("homePage").classList.add("active");
-        alert("3 - Added homepage");
+    document.getElementById("homePage").classList.add("active");
+
 
     const d = character.details;
 alert("4 - " + JSON.stringify(d));
