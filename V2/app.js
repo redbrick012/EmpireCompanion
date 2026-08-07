@@ -29,7 +29,8 @@ const App = {
     },
 
     characterImported(character) {
-
+document.getElementById("welcomePage")?.classList.remove("active");
+document.getElementById("homePage")?.classList.add("active");
        const d = character.details;
 
 document.getElementById("characterName").textContent = d.name || "";
