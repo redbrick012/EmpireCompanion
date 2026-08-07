@@ -3,7 +3,15 @@ const App = {
     init() {
         this.fileInput = document.getElementById("characterFile");
 
-        document.getElementById("importButton")?.addEventListener("click", () => this.fileInput.click());
+        document.getElementById("importButton")?.addEventListener("click", () => {
+
+    alert("Import button clicked");
+
+    console.log(this.fileInput);
+
+    this.fileInput.click();
+
+});", () => this.fileInput.click());
         document.getElementById("importAnother")?.addEventListener("click", () => this.fileInput.click());
 
         this.fileInput.addEventListener("change", async (e) => {
