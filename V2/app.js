@@ -86,6 +86,43 @@ document.getElementById("bondedList").innerHTML =
 
     }
 App.renderCharacters();
+renderCharacters() {
+
+    const list =
+        document.getElementById("characterList");
+
+    const current =
+        Storage.getCurrentCharacter();
+
+    list.innerHTML = "";
+
+    Storage.getCharacters().forEach(character => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "detail-row";
+
+        card.innerHTML = `
+<strong>${character.details.name}</strong>
+<span>${character.details.nation}</span>
+`;
+
+        card.onclick = () => {
+
+            Storage.setCurrentCharacter(
+                character.details.cid
+            );
+
+            this.characterImported(character);
+
+        };
+
+        list.appendChild(card);
+
+    });
+
+}
 };
 
 document.addEventListener("DOMContentLoaded", () => {
