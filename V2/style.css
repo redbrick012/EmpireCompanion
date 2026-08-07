@@ -342,6 +342,18 @@ header h2{
 
 }
 
+.detail-row {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:12px 16px;
+    margin-bottom:8px;
+
+    background:#183657;
+    border:1px solid var(--border);
+    border-radius:12px;
+}
 /* ==========================================
    DASHBOARD
 ========================================== */
